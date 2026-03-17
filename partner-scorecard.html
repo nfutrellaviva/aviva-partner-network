@@ -461,7 +461,7 @@ const COL = {
   apptGrowth:       'YOY Appt Growth %',
   cogs:             'COGs %',
   payroll:          'Payroll %',
-  netIncome:        'Net Income / EBITDA %',
+  netIncome:        'Net Income/EBITDA %',
   notes:            'Operational Notes',
 };
 
@@ -1036,7 +1036,7 @@ function openPartner(partnerId) {
       ${mRow('YOY Appointment Growth', row[COL.apptGrowth], 'apptGrowth', '≥10%')}
       ${mRow('COGs %', row[COL.cogs], 'cogs', '≤30%')}
       ${mRow('Payroll %', row[COL.payroll], 'payroll', '≤30%')}
-      ${mRow('Net Income / EBITDA %', row[COL.netIncome], 'netIncome', '—')}
+      ${mRow('Net Income/EBITDA %', row[COL.netIncome], 'netIncome', '—')}
     </div>
 
     ${row[COL.notes] ? `<div class="modal-section">
