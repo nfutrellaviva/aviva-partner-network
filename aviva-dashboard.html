@@ -696,6 +696,7 @@ function renderTrendPanel(slot,locName,rows,months,goals) {
   html += '<div class="legend-item"><div class="legend-dot" style="background:#7a8ba8"></div>Payroll</div>';
   html += '<div class="legend-item"><div class="legend-dot" style="background:#5a9e6f"></div>Net Income</div>';
   html += '</div></div>';
+  registerSlot(slot, locName);
   html += buildGoalCards(goals, slot, locName);
   html += '<div class="section-title" style="margin-top:32px;">Monthly Detail</div>';
   html += '<table class="metrics-table"><thead><tr><th>Month</th><th>Revenue</th><th>COGs</th><th>% Rev</th><th>Payroll</th><th>% Rev</th><th>Net Income</th><th>% Rev</th></tr></thead>';
@@ -774,13 +775,11 @@ function buildGoalCards(goals, slot, locName) {
   html += '<span class="save-indicator" id="save-ind-'+slot+'">Saved</span>';
   html += '</div></div>';
   html += '<div class="goal-cards-grid" id="goal-grid-'+slot+'">';
-
   stored.forEach(function(g, idx) {
     html += renderGoalCard(g, idx, slot, locName);
   });
-
   html += '</div>';
-  html += '<button class="btn-add-goal" data-slot="'+slot+'" data-loc="'+escAttr(locName)+'" onclick="addGoalClick(this)">+ Add Goal</button>';
+  html += '<button class="btn-add-goal" id="add-goal-'+slot+'" onclick="addGoalById(this)">+ Add Goal</button>';
   html += '</div>';
   return html;
 }
@@ -816,14 +815,14 @@ function renderGoalCard(g, idx, slot, locName) {
   notesHtml += '<div class="add-note-row">'
     + '<input class="note-date-new" id="nd-'+cardId+'" placeholder="'+todayStr()+'" value="" />'
     + '<textarea class="note-text-new" id="nt-'+cardId+'" placeholder="Add a follow-up note..." rows="2"></textarea>'
-    + '<button class="btn-add-note" data-slot="'+slot+'" data-loc="'+escAttr(locName)+'" data-idx="'+idx+'" onclick="addNoteClick(this)">Add</button>'
+    + '<button class="btn-add-note" onclick="addNoteByEl(this)" data-slot="'+slot+'" data-idx="'+idx+'">Add</button>'
     + '</div>';
 
   var card = '<div class="goal-card status-'+sc+'" id="card-'+cardId+'" style="'+(isAchieved?'opacity:.7':'')+'">';
   card += '<div class="goal-card-inner">';
   card += '<div class="goal-card-top">';
   card += '<input class="goal-title-input" id="gt-'+cardId+'" value="'+escAttr(g.title||'')+'" placeholder="Goal title..." />';
-  card += '<select class="status-select s-'+sc+'" id="gs-'+cardId+'" data-slot="'+slot+'" data-loc="'+escAttr(locName)+'" data-idx="'+idx+'" onchange="onStatusChangeClick(this)">';
+  card += '<select class="status-select s-'+sc+'" id="gs-'+cardId+'" onchange="onStatusByEl(this)" data-slot="'+slot+'" data-idx="'+idx+'">';
   ['On Track','At Risk','Achieved','Paused','Not Started'].forEach(function(s) {
     card += '<option value="'+s+'"'+(g.status===s?' selected':'')+'>'+s+'</option>';
   });
@@ -839,19 +838,43 @@ function renderGoalCard(g, idx, slot, locName) {
   card += '</button>';
   card += '<div class="goal-notes-body" id="nb-'+cardId+'">'+notesHtml+'</div>';
   card += '<div class="goal-card-footer">';
-  card += '<button class="btn-del-goal" data-slot="'+slot+'" data-loc="'+escAttr(locName)+'" data-idx="'+idx+'" onclick="deleteGoalClick(this)">Delete</button>';
-  card += '<button class="btn-save-goal" data-slot="'+slot+'" data-loc="'+escAttr(locName)+'" data-idx="'+idx+'" onclick="saveGoalClick(this)">Save</button>';
+  card += '<button class="btn-del-goal" onclick="deleteGoalByEl(this)" data-slot="'+slot+'" data-idx="'+idx+'">Delete</button>';
+  card += '<button class="btn-save-goal" onclick="saveGoalByEl(this)" data-slot="'+slot+'" data-idx="'+idx+'">Save</button>';
   card += '</div>';
   card += '</div></div>';
   return card;
 }
 
-// ── Data-attribute click handlers (avoids inline quote escaping issues) ──
-function addGoalClick(btn) { addGoal(btn.dataset.slot, btn.dataset.loc); }
-function addNoteClick(btn) { addNote(btn.dataset.slot, btn.dataset.loc, parseInt(btn.dataset.idx)); }
-function saveGoalClick(btn) { saveGoal(btn.dataset.slot, btn.dataset.loc, parseInt(btn.dataset.idx)); }
-function deleteGoalClick(btn) { deleteGoal(btn.dataset.slot, btn.dataset.loc, parseInt(btn.dataset.idx)); }
-function onStatusChangeClick(sel) { onStatusChange(sel, sel.dataset.slot, sel.dataset.loc, parseInt(sel.dataset.idx)); }
+// ── Slot-to-location registry ──
+var _slotLocMap = {};
+
+function registerSlot(slot, locName) {
+  _slotLocMap[slot] = locName;
+}
+
+function addGoalById(btn) {
+  var slot = btn.id.replace('add-goal-','');
+  var locName = _slotLocMap[slot];
+  if (locName) addGoal(slot, locName);
+}
+
+// ── Slot-registry-based click handlers ──
+function saveGoalByEl(btn) {
+  var slot = btn.dataset.slot, idx = parseInt(btn.dataset.idx);
+  saveGoal(slot, _slotLocMap[slot], idx);
+}
+function deleteGoalByEl(btn) {
+  var slot = btn.dataset.slot, idx = parseInt(btn.dataset.idx);
+  deleteGoal(slot, _slotLocMap[slot], idx);
+}
+function addNoteByEl(btn) {
+  var slot = btn.dataset.slot, idx = parseInt(btn.dataset.idx);
+  addNote(slot, _slotLocMap[slot], idx);
+}
+function onStatusByEl(sel) {
+  var slot = sel.dataset.slot, idx = parseInt(sel.dataset.idx);
+  onStatusChange(sel, slot, _slotLocMap[slot], idx);
+}
 
 function addGoal(slot, locName) {
   var goals = getGoalsForLoc(locName);
