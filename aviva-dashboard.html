@@ -206,7 +206,7 @@
 </div>
 <div class="sheet-banner" style="background:var(--surface2);">
   <label>Goals Sheet URL</label>
-  <input type="text" id="goals-url" placeholder="Published CSV URL for Goals &amp; Notes tab…" />
+  <input type="text" id="goals-url" placeholder="Published CSV URL for Goals &amp; Notes tab…" value="https://docs.google.com/spreadsheets/d/1QfwW1Y-STwMn1p6CQ9gfMLw1cDhDeJcddOT386CYbsk/gviz/tq?tqx=out:csv&sheet=Goals%20%26%20Notes" />
 </div>
 
 <div class="nav-wrapper">
@@ -400,9 +400,21 @@ function loadAll() {
       var periods = finRows.map(function(r){ return r.month; }).filter(function(v,i,a){ return a.indexOf(v)===i; }).join(', ');
       setStatus('✓ Live from Partner Scorecard — ' + finRows.length + ' submissions (' + periods + ')' + (goalsUrl ? ' + goals' : ''), 'ok');
 
-      // Goals via JSONP if it's a gviz URL, otherwise skip (CSV fetch won't work cross-origin)
+      // Load goals via JSONP (same CORS-safe approach as scorecard)
       if (goalsUrl) {
-        setStatus('✓ Scorecard loaded. Note: Goals CSV requires the sheet to allow cross-origin access.', 'ok');
+        var goalSheetId = '1QfwW1Y-STwMn1p6CQ9gfMLw1cDhDeJcddOT386CYbsk';
+        var goalCbName = '_goalsCb_' + Date.now();
+        var goalJsonpUrl = 'https://docs.google.com/spreadsheets/d/' + goalSheetId
+          + '/gviz/tq?tqx=out:json;responseHandler:' + goalCbName + '&sheet=Goals%20%26%20Notes&t=' + Date.now();
+        loadViaJSONP(goalJsonpUrl, goalCbName)
+          .then(function(gJson) {
+            goalsData = parseGoalsFromGviz(gJson);
+            renderDashboard(finRows, orderedLocs);
+            setStatus('✓ Live from Partner Scorecard + Goals (' + periods + ')', 'ok');
+          })
+          .catch(function(e) {
+            console.warn('Goals load failed:', e);
+          });
       }
     })
     .catch(function(e) {
@@ -486,6 +498,28 @@ function parseGoalsCSV(text) {
   return rows;
 }
 
+function parseGoalsFromGviz(json) {
+  var cols = json.table.cols.map(function(c){ return c.label.toLowerCase().replace(/[\s\-_&]/g,''); });
+  var rows = json.table.rows || [];
+  var result = [];
+  rows.forEach(function(row) {
+    var o = {};
+    row.c.forEach(function(cell, i){ o[cols[i]] = (cell && cell.v != null) ? String(cell.v).trim() : ''; });
+    if (o['location'] && (o['goaltitle'] || o['title'])) {
+      result.push({
+        location:   o['location'],
+        title:      o['goaltitle'] || o['title'] || '',
+        dateSet:    o['dateset'] || o['date'] || '',
+        targetDate: o['targetdate'] || o['target'] || '',
+        status:     o['status'] || '',
+        desc:       o['goaldescription'] || o['description'] || o['desc'] || '',
+        notes:      o['followupnotes'] || o['notes'] || o['followup'] || ''
+      });
+    }
+  });
+  return result;
+}
+
 function splitCSV(line) {
   const r=[];let c='',q=false;
   for(let i=0;i<line.length;i++){
@@ -498,15 +532,35 @@ function splitCSV(line) {
 function renderDashboard(rows, locs) {
   Object.values(chartInstances).forEach(c=>{try{c.destroy();}catch(e){}});
   chartInstances={};
-  const slots=['loc1','loc2','loc3','loc4','loc5','loc6','loc7','loc8','loc9','loc10','loc11'],sortedLocs=locs.slice(0,11);
-  const months=[...new Set(rows.map(r=>r.month))];
-  const latestMonth=months[months.length-1];
+  var slots=['loc1','loc2','loc3','loc4','loc5','loc6','loc7','loc8','loc9','loc10','loc11'];
+  var sortedLocs=locs.slice(0,11);
+  var months=[...new Set(rows.map(r=>r.month))];
+  var latestMonth=months[months.length-1];
   document.getElementById('current-period').textContent=latestMonth||'—';
-  sortedLocs.forEach((locName,li)=>{
-    // Tab labels are already set statically — no rename needed
-    const locRows=rows.filter(r=>r.location===locName);
-    const locMonths=[...new Set(locRows.map(r=>r.month))];
-    const current=locRows.find(r=>r.month===latestMonth)||locRows[locRows.length-1];
+
+  // Short display labels for pills
+  var SHORT = {
+    'Pura Vida MedSpa & Cosmetic Laser Center - Maple Lawn': 'Pura Vida - Maple Lawn',
+    'Pure Regenerative Medicine': 'Pure Regenerative',
+    'Chrome Aesthetics Spa': 'Chrome Aesthetics',
+    'Urban Aesthetics Gilbert': 'Urban - Gilbert',
+    'Urban Aesthetics Fishersville': 'Urban - Fishersville'
+  };
+  function shortLabel(name) { return SHORT[name] || name; }
+
+  // Update pills to exactly match the data order so pills and panels stay in sync
+  var pills = document.querySelectorAll('.loc-pill');
+  pills.forEach(function(pill, i) {
+    if (sortedLocs[i]) {
+      pill.textContent = shortLabel(sortedLocs[i]);
+      pill.dataset.slot = slots[i];
+    }
+  });
+
+  sortedLocs.forEach(function(locName, li) {
+    var locRows=rows.filter(r=>r.location===locName);
+    var locMonths=[...new Set(locRows.map(r=>r.month))];
+    var current=locRows.find(r=>r.month===latestMonth)||locRows[locRows.length-1];
     renderMonthPanel(slots[li],locName,current,latestMonth);
     renderTrendPanel(slots[li],locName,locRows,locMonths,goalsData.filter(g=>g.location===locName));
   });
