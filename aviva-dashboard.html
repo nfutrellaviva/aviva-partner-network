@@ -183,6 +183,102 @@
     .metrics-grid { grid-template-columns:1fr; }
     .goal-cards-grid { grid-template-columns:1fr; }
   }
+
+  /* ══ GOAL EDITOR ══ */
+  .goals-section { margin:36px 0 32px; }
+  .goals-header-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; flex-wrap:wrap; gap:8px; }
+  .goals-count { font-size:10px; letter-spacing:.12em; color:var(--text-muted); background:var(--surface3); padding:3px 10px; border-radius:2px; }
+  .goal-cards-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)); gap:16px; }
+
+  .goal-card { background:var(--surface); border:1px solid var(--border); border-radius:3px; overflow:hidden; position:relative; transition:border-color .2s; }
+  .goal-card:hover { border-color:rgba(201,146,42,0.2); }
+  .goal-card::before { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; }
+  .goal-card.status-on-track::before    { background:var(--green); }
+  .goal-card.status-at-risk::before     { background:#c07070; }
+  .goal-card.status-achieved::before    { background:var(--blue); }
+  .goal-card.status-paused::before      { background:var(--yellow); }
+  .goal-card.status-not-started::before { background:rgba(255,255,255,0.1); }
+
+  .goal-card-inner { padding:16px 16px 0 18px; }
+  .goal-card-top { display:flex; align-items:flex-start; justify-content:space-between; gap:8px; margin-bottom:8px; }
+
+  .goal-title-input {
+    font-size:13px; font-weight:400; letter-spacing:.06em; color:var(--text);
+    background:transparent; border:none; outline:none; flex:1;
+    font-family:'Jost',sans-serif; padding:0;
+    border-bottom:1px solid transparent; transition:border-color .2s;
+  }
+  .goal-title-input:focus { border-bottom-color:var(--gold); }
+  .goal-title-input::placeholder { color:var(--text-muted); font-style:italic; }
+
+  .status-select {
+    font-size:9px; font-weight:500; letter-spacing:.14em; text-transform:uppercase;
+    padding:4px 8px; border-radius:2px; border:none; cursor:pointer;
+    font-family:'Jost',sans-serif; flex-shrink:0; outline:none;
+  }
+  .status-select.s-on-track    { background:var(--green-dim);  color:var(--green); }
+  .status-select.s-at-risk     { background:var(--red-dim);    color:#c07070; }
+  .status-select.s-achieved    { background:var(--blue-dim);   color:var(--blue); }
+  .status-select.s-paused      { background:var(--yellow-dim); color:var(--yellow); }
+  .status-select.s-not-started { background:rgba(255,255,255,0.05); color:var(--text-muted); }
+
+  .goal-desc-input {
+    width:100%; background:transparent; border:none; outline:none;
+    font-size:11px; color:var(--text-muted); line-height:1.6; letter-spacing:.02em;
+    font-family:'Jost',sans-serif; resize:none; padding:0; margin-bottom:8px;
+    border-bottom:1px solid transparent; transition:border-color .2s; min-height:36px;
+  }
+  .goal-desc-input:focus { border-bottom-color:rgba(255,255,255,0.1); color:var(--text-dim); }
+  .goal-desc-input::placeholder { color:var(--text-muted); font-style:italic; }
+
+  .goal-dates-row { display:flex; gap:16px; margin-bottom:10px; flex-wrap:wrap; }
+  .goal-date-field { display:flex; flex-direction:column; gap:3px; }
+  .goal-date-label-txt { font-size:8px; letter-spacing:.2em; text-transform:uppercase; color:var(--text-muted); }
+  .goal-date-input {
+    font-size:11px; color:var(--text-dim); background:transparent; border:none;
+    outline:none; font-family:'Jost',sans-serif; border-bottom:1px solid transparent;
+    transition:border-color .2s; width:100px; padding:1px 0;
+  }
+  .goal-date-input:focus { border-bottom-color:var(--gold); }
+  .goal-date-input::placeholder { color:var(--text-muted); font-style:italic; }
+
+  .goal-notes-toggle { display:flex; align-items:center; gap:8px; font-size:9px; letter-spacing:.18em; text-transform:uppercase; color:var(--gold); cursor:pointer; padding:10px 0; border-top:1px solid var(--border); background:none; border-left:none; border-right:none; border-bottom:none; width:100%; text-align:left; transition:color .2s; font-family:'Jost',sans-serif; }
+  .goal-notes-toggle:hover { color:var(--gold-light); }
+  .toggle-arrow { font-size:8px; transition:transform .2s; display:inline-block; }
+  .toggle-arrow.open { transform:rotate(90deg); }
+
+  .goal-notes-body { display:none; border-top:1px solid var(--border); padding:10px 0 6px; }
+  .goal-notes-body.visible { display:block; }
+
+  .notes-thread { margin-bottom:8px; }
+  .note-entry { display:flex; gap:10px; padding:7px 0; border-bottom:1px solid rgba(255,255,255,0.04); }
+  .note-entry:last-child { border-bottom:none; }
+  .note-date-txt { font-size:9px; letter-spacing:.1em; color:var(--gold); white-space:nowrap; min-width:70px; padding-top:2px; }
+  .note-text-txt { font-size:11px; color:var(--text-dim); line-height:1.55; flex:1; }
+
+  .add-note-row { display:flex; gap:8px; align-items:flex-start; margin-top:6px; }
+  .note-date-new { font-size:10px; color:var(--text-muted); background:transparent; border:none; outline:none; font-family:'Jost',sans-serif; border-bottom:1px solid var(--border); width:72px; padding:4px 0; transition:border-color .2s; }
+  .note-date-new:focus { border-bottom-color:var(--gold); }
+  .note-text-new { flex:1; background:var(--surface2); border:1px solid var(--border); border-radius:2px; color:var(--text); font-family:'Jost',sans-serif; font-size:11px; padding:6px 10px; outline:none; resize:none; min-height:32px; transition:border-color .2s; }
+  .note-text-new:focus { border-color:rgba(201,146,42,0.4); }
+  .note-text-new::placeholder { color:var(--text-muted); }
+  .btn-add-note { background:var(--gold-dim); border:1px solid rgba(201,146,42,0.3); color:var(--gold-light); font-family:'Jost',sans-serif; font-size:9px; letter-spacing:.15em; text-transform:uppercase; padding:6px 12px; cursor:pointer; border-radius:2px; white-space:nowrap; transition:all .2s; }
+  .btn-add-note:hover { background:var(--gold); color:#000; }
+
+  .goal-card-footer { display:flex; justify-content:flex-end; padding:6px 0 10px; gap:8px; }
+  .btn-del-goal { background:transparent; border:none; color:var(--text-muted); font-size:9px; letter-spacing:.1em; text-transform:uppercase; cursor:pointer; font-family:'Jost',sans-serif; transition:color .2s; padding:4px 0; }
+  .btn-del-goal:hover { color:#c07070; }
+  .btn-save-goal { background:transparent; border:none; color:var(--gold); font-size:9px; letter-spacing:.1em; text-transform:uppercase; cursor:pointer; font-family:'Jost',sans-serif; transition:color .2s; padding:4px 0; }
+  .btn-save-goal:hover { color:var(--gold-light); }
+
+  .btn-add-goal { background:transparent; border:1px dashed rgba(201,146,42,0.3); color:var(--gold); font-family:'Jost',sans-serif; font-size:10px; letter-spacing:.15em; text-transform:uppercase; padding:12px 20px; cursor:pointer; border-radius:3px; width:100%; transition:all .2s; margin-top:4px; }
+  .btn-add-goal:hover { background:var(--gold-dim); border-color:var(--gold); }
+
+  .no-goals-msg { text-align:center; padding:24px; color:var(--text-muted); font-size:12px; letter-spacing:.08em; }
+
+  .save-indicator { font-size:9px; letter-spacing:.12em; color:var(--green); opacity:0; transition:opacity .3s; }
+  .save-indicator.show { opacity:1; }
+
 </style>
 </head>
 <body>
@@ -204,10 +300,7 @@
   <button class="btn-load" onclick="loadAll()">Load Data</button>
   <span id="status-msg"></span>
 </div>
-<div class="sheet-banner" style="background:var(--surface2);">
-  <label>Goals Sheet URL</label>
-  <input type="text" id="goals-url" placeholder="Published CSV URL for Goals &amp; Notes tab…" value="https://docs.google.com/spreadsheets/d/1QfwW1Y-STwMn1p6CQ9gfMLw1cDhDeJcddOT386CYbsk/gviz/tq?tqx=out:csv&sheet=Goals%20%26%20Notes" />
-</div>
+
 
 <div class="nav-wrapper">
   <div class="nav-row1">
@@ -380,7 +473,7 @@ function processGvizData(json) {
 function loadAll() {
   setStatus('Loading…','');
   var SHEET_ID = '1-pixu1e2mUvWQjb6ovMpvAz_48OkHOwk2lPBEeIy_OY';
-  var goalsUrl = document.getElementById('goals-url').value.trim();
+  // Goals handled locally via localStorage
   var cbName = '_gvizCb_' + Date.now();
   var jsonpUrl = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID
     + '/gviz/tq?tqx=out:json;responseHandler:' + cbName + '&sheet=Submissions&t=' + Date.now();
@@ -400,22 +493,7 @@ function loadAll() {
       var periods = finRows.map(function(r){ return r.month; }).filter(function(v,i,a){ return a.indexOf(v)===i; }).join(', ');
       setStatus('✓ Live from Partner Scorecard — ' + finRows.length + ' submissions (' + periods + ')' + (goalsUrl ? ' + goals' : ''), 'ok');
 
-      // Load goals via JSONP (same CORS-safe approach as scorecard)
-      if (goalsUrl) {
-        var goalSheetId = '1QfwW1Y-STwMn1p6CQ9gfMLw1cDhDeJcddOT386CYbsk';
-        var goalCbName = '_goalsCb_' + Date.now();
-        var goalJsonpUrl = 'https://docs.google.com/spreadsheets/d/' + goalSheetId
-          + '/gviz/tq?tqx=out:json;responseHandler:' + goalCbName + '&sheet=Goals%20%26%20Notes&t=' + Date.now();
-        loadViaJSONP(goalJsonpUrl, goalCbName)
-          .then(function(gJson) {
-            goalsData = parseGoalsFromGviz(gJson);
-            renderDashboard(finRows, orderedLocs);
-            setStatus('✓ Live from Partner Scorecard + Goals (' + periods + ')', 'ok');
-          })
-          .catch(function(e) {
-            console.warn('Goals load failed:', e);
-          });
-      }
+      // Goals are stored locally in browser — no fetch needed
     })
     .catch(function(e) {
       setStatus('Error: ' + e.message, 'err');
@@ -618,7 +696,7 @@ function renderTrendPanel(slot,locName,rows,months,goals) {
   html += '<div class="legend-item"><div class="legend-dot" style="background:#7a8ba8"></div>Payroll</div>';
   html += '<div class="legend-item"><div class="legend-dot" style="background:#5a9e6f"></div>Net Income</div>';
   html += '</div></div>';
-  html += buildGoalCards(goals, slot);
+  html += buildGoalCards(goals, slot, locName);
   html += '<div class="section-title" style="margin-top:32px;">Monthly Detail</div>';
   html += '<table class="metrics-table"><thead><tr><th>Month</th><th>Revenue</th><th>COGs</th><th>% Rev</th><th>Payroll</th><th>% Rev</th><th>Net Income</th><th>% Rev</th></tr></thead>';
   html += '<tbody>'+tableRows+'</tbody></table>';
@@ -643,88 +721,203 @@ function renderTrendPanel(slot,locName,rows,months,goals) {
   },50);
 }
 
-function buildGoalCards(goals,slot) {
-  var SM={
-    'on track':   {cls:'on-track',   badge:'badge-on-track',   dot:'dot-on-track',   label:'On Track'},
-    'at risk':    {cls:'at-risk',    badge:'badge-at-risk',    dot:'dot-at-risk',    label:'At Risk'},
-    'achieved':   {cls:'achieved',   badge:'badge-achieved',   dot:'dot-achieved',   label:'Achieved'},
-    'paused':     {cls:'paused',     badge:'badge-paused',     dot:'dot-paused',     label:'Paused'},
-    'not started':{cls:'not-started',badge:'badge-not-started',dot:'dot-not-started',label:'Not Started'},
-  };
-  var order={'on track':0,'at risk':1,'not started':2,'paused':3,'achieved':4};
-  var sorted=goals.slice().sort(function(a,b){
-    return (order[a.status.toLowerCase()]!=null?order[a.status.toLowerCase()]:5)
-          -(order[b.status.toLowerCase()]!=null?order[b.status.toLowerCase()]:5);
-  });
-  var active=sorted.filter(function(g){return g.status.toLowerCase()!=='achieved';}).length;
-  var achieved=sorted.filter(function(g){return g.status.toLowerCase()==='achieved';}).length;
+// ══ GOAL STORAGE (localStorage) ══
+var STORAGE_KEY = 'aviva_goals_v2';
 
-  var sectionStart = '<div class="goals-section">'
-    + '<div class="goals-header-row">'
-    + '<div class="section-title" style="margin:0">Goals &amp; Visit Notes</div>'
-    + '<div style="display:flex;gap:8px">'
-    + (active ? '<span class="goals-count">'+active+' active</span>' : '')
-    + (achieved ? '<span class="goals-count" style="color:var(--blue)">'+achieved+' achieved \u2713</span>' : '')
-    + '</div></div>';
-
-  if(!sorted.length) {
-    return sectionStart + '<div class="no-goals">No goals loaded. Add goals to the Goals &amp; Notes sheet tab to see them here.</div></div>';
-  }
-
-  var cards = '';
-  for (var idx=0; idx<sorted.length; idx++) {
-    var g = sorted[idx];
-    var sKey = g.status.toLowerCase();
-    var sm = SM[sKey] || {cls:'not-started',badge:'badge-not-started',dot:'dot-not-started',label:g.status};
-    var isAchieved = sKey==='achieved';
-    var cardId = slot+'-g'+idx;
-
-    // Parse notes thread
-    var noteLines = g.notes ? g.notes.split('\n').filter(function(l){return l.trim();}) : [];
-    var notesHtml = '';
-    if (noteLines.length) {
-      for (var ni=0; ni<noteLines.length; ni++) {
-        var line = noteLines[ni];
-        var ci = line.indexOf(':');
-        var ndate = '', ntext = line;
-        if (ci>0 && ci<16) { ndate=line.slice(0,ci).trim(); ntext=line.slice(ci+1).trim(); }
-        notesHtml += '<div class="note-entry">'
-          + (ndate ? '<span class="note-date">'+ndate+'</span>' : '')
-          + '<span class="note-text">'+ntext+'</span></div>';
-      }
-    } else {
-      notesHtml = '<div style="color:var(--text-muted);font-size:11px;padding:8px 0;">No follow-up notes yet.</div>';
-    }
-
-    var card = '<div class="goal-card status-'+sm.cls+'" style="'+(isAchieved?'opacity:.65':'')+'">'
-      + '<div class="goal-card-inner">'
-      + '<div class="goal-card-top">'
-      + '<div class="goal-title">'+g.title+'</div>'
-      + '<span class="status-badge '+sm.badge+'"><span class="status-dot '+sm.dot+'"></span>'+sm.label+'</span>'
-      + '</div>'
-      + (g.desc ? '<div class="goal-desc">'+g.desc+'</div>' : '')
-      + '<div class="goal-dates">'
-      + (g.dateSet ? '<div class="goal-date-item"><span class="goal-date-label">Date Set</span><span class="goal-date-val">'+g.dateSet+'</span></div>' : '')
-      + (g.targetDate ? '<div class="goal-date-item"><span class="goal-date-label">Target Date</span><span class="goal-date-val">'+g.targetDate+'</span></div>' : '')
-      + '</div>'
-      + '<button class="goal-notes-toggle" onclick="toggleNotes(\''+cardId+'\',this)">'
-      + '<span class="toggle-arrow" id="arr-'+cardId+'">&#9654;</span>'
-      + ' Follow-Up Notes'
-      + (noteLines.length ? ' <span style="color:var(--text-muted);font-size:9px;margin-left:4px">('+noteLines.length+')</span>' : '')
-      + '</button>'
-      + '<div class="goal-notes-body" id="nb-'+cardId+'">'+notesHtml+'</div>'
-      + '</div></div>';
-    cards += card;
-  }
-
-  return sectionStart + '<div class="goal-cards-grid">'+cards+'</div></div>';
+function loadGoalsFromStorage() {
+  try {
+    var raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch(e) { return {}; }
 }
 
-function toggleNotes(id,btn) {
-  const b=document.getElementById('nb-'+id),a=document.getElementById('arr-'+id);
-  if(!b)return;
-  const open=b.classList.toggle('visible');
-  if(a)a.classList.toggle('open',open);
+function saveGoalsToStorage(data) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    return true;
+  } catch(e) { return false; }
+}
+
+function getGoalsForLoc(locName) {
+  var all = loadGoalsFromStorage();
+  return all[locName] || [];
+}
+
+function saveGoalsForLoc(locName, goals) {
+  var all = loadGoalsFromStorage();
+  all[locName] = goals;
+  saveGoalsToStorage(all);
+}
+
+function todayStr() {
+  var d = new Date();
+  var m = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()];
+  return m + ' ' + d.getFullYear();
+}
+
+function statusClass(status) {
+  var map = {'On Track':'on-track','At Risk':'at-risk','Achieved':'achieved','Paused':'paused','Not Started':'not-started'};
+  return map[status] || 'not-started';
+}
+
+function buildGoalCards(goals, slot, locName) {
+  var stored = getGoalsForLoc(locName);
+  var active = stored.filter(function(g){ return g.status !== 'Achieved'; }).length;
+  var achieved = stored.filter(function(g){ return g.status === 'Achieved'; }).length;
+
+  var html = '<div class="goals-section">';
+  html += '<div class="goals-header-row">';
+  html += '<div class="section-title" style="margin:0">Goals &amp; Visit Notes</div>';
+  html += '<div style="display:flex;gap:8px;align-items:center">';
+  if (active) html += '<span class="goals-count">'+active+' active</span>';
+  if (achieved) html += '<span class="goals-count" style="color:var(--blue)">'+achieved+' achieved</span>';
+  html += '<span class="save-indicator" id="save-ind-'+slot+'">Saved</span>';
+  html += '</div></div>';
+  html += '<div class="goal-cards-grid" id="goal-grid-'+slot+'">';
+
+  stored.forEach(function(g, idx) {
+    html += renderGoalCard(g, idx, slot, locName);
+  });
+
+  html += '</div>';
+  html += '<button class="btn-add-goal" onclick="addGoal(''+slot+'',''+escAttr(locName)+'')">+ Add Goal</button>';
+  html += '</div>';
+  return html;
+}
+
+function escAttr(s) {
+  return s.replace(/'/g, "\'").replace(/"/g, '&quot;');
+}
+
+function renderGoalCard(g, idx, slot, locName) {
+  var sc = statusClass(g.status);
+  var isAchieved = g.status === 'Achieved';
+  var cardId = slot+'-g'+idx;
+
+  var notesHtml = '';
+  var noteList = g.notes || [];
+  if (noteList.length) {
+    notesHtml += '<div class="notes-thread">';
+    noteList.forEach(function(n) {
+      notesHtml += '<div class="note-entry">'
+        + '<span class="note-date-txt">'+n.date+'</span>'
+        + '<span class="note-text-txt">'+n.text+'</span>'
+        + '</div>';
+    });
+    notesHtml += '</div>';
+  }
+  notesHtml += '<div class="add-note-row">'
+    + '<input class="note-date-new" id="nd-'+cardId+'" placeholder="'+todayStr()+'" value="" />'
+    + '<textarea class="note-text-new" id="nt-'+cardId+'" placeholder="Add a follow-up note..." rows="2"></textarea>'
+    + '<button class="btn-add-note" onclick="addNote(''+slot+'',''+escAttr(locName)+'','+idx+')">Add</button>'
+    + '</div>';
+
+  var card = '<div class="goal-card status-'+sc+'" id="card-'+cardId+'" style="'+(isAchieved?'opacity:.7':'')+'">';
+  card += '<div class="goal-card-inner">';
+  card += '<div class="goal-card-top">';
+  card += '<input class="goal-title-input" id="gt-'+cardId+'" value="'+escAttr(g.title||'')+'" placeholder="Goal title..." />';
+  card += '<select class="status-select s-'+sc+'" id="gs-'+cardId+'" onchange="onStatusChange(this,''+slot+'',''+escAttr(locName)+'','+idx+')">';
+  ['On Track','At Risk','Achieved','Paused','Not Started'].forEach(function(s) {
+    card += '<option value="'+s+'"'+(g.status===s?' selected':'')+'>'+s+'</option>';
+  });
+  card += '</select></div>';
+  card += '<textarea class="goal-desc-input" id="gd-'+cardId+'" placeholder="Describe this goal..." rows="2">'+escAttr(g.desc||'')+'</textarea>';
+  card += '<div class="goal-dates-row">';
+  card += '<div class="goal-date-field"><span class="goal-date-label-txt">Date Set</span><input class="goal-date-input" id="gds-'+cardId+'" value="'+escAttr(g.dateSet||'')+'" placeholder="e.g. Jan 2026" /></div>';
+  card += '<div class="goal-date-field"><span class="goal-date-label-txt">Target Date</span><input class="goal-date-input" id="gdt-'+cardId+'" value="'+escAttr(g.targetDate||'')+'" placeholder="e.g. Jun 2026" /></div>';
+  card += '</div>';
+  card += '<button class="goal-notes-toggle" onclick="toggleNotes(''+cardId+'')">';
+  card += '<span class="toggle-arrow" id="arr-'+cardId+'">&#9654;</span> Follow-Up Notes';
+  if (noteList.length) card += ' <span style="color:var(--text-muted);font-size:9px;margin-left:4px">('+noteList.length+')</span>';
+  card += '</button>';
+  card += '<div class="goal-notes-body" id="nb-'+cardId+'">'+notesHtml+'</div>';
+  card += '<div class="goal-card-footer">';
+  card += '<button class="btn-del-goal" onclick="deleteGoal(''+slot+'',''+escAttr(locName)+'','+idx+')">Delete</button>';
+  card += '<button class="btn-save-goal" onclick="saveGoal(''+slot+'',''+escAttr(locName)+'','+idx+')">Save</button>';
+  card += '</div>';
+  card += '</div></div>';
+  return card;
+}
+
+function addGoal(slot, locName) {
+  var goals = getGoalsForLoc(locName);
+  goals.push({ title:'', status:'Not Started', desc:'', dateSet:'', targetDate:'', notes:[] });
+  saveGoalsForLoc(locName, goals);
+  refreshGoalGrid(slot, locName);
+  flashSaved(slot);
+}
+
+function saveGoal(slot, locName, idx) {
+  var goals = getGoalsForLoc(locName);
+  var cardId = slot+'-g'+idx;
+  goals[idx].title     = document.getElementById('gt-'+cardId).value;
+  goals[idx].status    = document.getElementById('gs-'+cardId).value;
+  goals[idx].desc      = document.getElementById('gd-'+cardId).value;
+  goals[idx].dateSet   = document.getElementById('gds-'+cardId).value;
+  goals[idx].targetDate= document.getElementById('gdt-'+cardId).value;
+  saveGoalsForLoc(locName, goals);
+  refreshGoalGrid(slot, locName);
+  flashSaved(slot);
+}
+
+function deleteGoal(slot, locName, idx) {
+  if (!confirm('Delete this goal?')) return;
+  var goals = getGoalsForLoc(locName);
+  goals.splice(idx, 1);
+  saveGoalsForLoc(locName, goals);
+  refreshGoalGrid(slot, locName);
+  flashSaved(slot);
+}
+
+function addNote(slot, locName, idx) {
+  var cardId = slot+'-g'+idx;
+  var dateEl = document.getElementById('nd-'+cardId);
+  var textEl = document.getElementById('nt-'+cardId);
+  var noteText = textEl.value.trim();
+  if (!noteText) return;
+  var noteDate = dateEl.value.trim() || todayStr();
+  var goals = getGoalsForLoc(locName);
+  if (!goals[idx].notes) goals[idx].notes = [];
+  goals[idx].notes.unshift({ date: noteDate, text: noteText });
+  saveGoalsForLoc(locName, goals);
+  refreshGoalGrid(slot, locName);
+  flashSaved(slot);
+}
+
+function onStatusChange(sel, slot, locName, idx) {
+  var sc = statusClass(sel.value);
+  sel.className = 'status-select s-'+sc;
+  var card = document.getElementById('card-'+slot+'-g'+idx);
+  if (card) {
+    card.className = 'goal-card status-'+sc + (sel.value==='Achieved'?' achieved':'');
+  }
+}
+
+function refreshGoalGrid(slot, locName) {
+  var grid = document.getElementById('goal-grid-'+slot);
+  if (!grid) return;
+  var stored = getGoalsForLoc(locName);
+  var html = '';
+  stored.forEach(function(g, idx) { html += renderGoalCard(g, idx, slot, locName); });
+  grid.innerHTML = html;
+  // Update counts
+  var active = stored.filter(function(g){ return g.status !== 'Achieved'; }).length;
+  var achieved = stored.filter(function(g){ return g.status === 'Achieved'; }).length;
+}
+
+function flashSaved(slot) {
+  var el = document.getElementById('save-ind-'+slot);
+  if (!el) return;
+  el.classList.add('show');
+  setTimeout(function(){ el.classList.remove('show'); }, 1800);
+}
+
+function toggleNotes(cardId) {
+  var b = document.getElementById('nb-'+cardId);
+  var a = document.getElementById('arr-'+cardId);
+  if (!b) return;
+  var open = b.classList.toggle('visible');
+  if (a) a.classList.toggle('open', open);
 }
 </script>
 </body>
