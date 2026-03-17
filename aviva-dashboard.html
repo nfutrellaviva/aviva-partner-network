@@ -173,10 +173,7 @@
   .step-text strong { display:block; font-weight:400; color:var(--text); margin-bottom:3px; letter-spacing:.05em; }
   .step-text code { background:var(--surface3); padding:1px 6px; border-radius:2px; font-size:11px; color:var(--gold-light); font-family:monospace; }
 
-  .demo-row { display:flex; align-items:center; gap:12px; margin-bottom:24px; flex-wrap:wrap; }
-  .demo-label { font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:var(--text-muted); }
-  .btn-demo { background:transparent; border:1px solid var(--border); color:var(--text-dim); font-family:'Jost',sans-serif; font-size:10px; letter-spacing:.15em; text-transform:uppercase; padding:7px 16px; cursor:pointer; border-radius:2px; transition:all .2s; }
-  .btn-demo:hover { border-color:var(--gold); color:var(--gold-light); background:var(--gold-dim); }
+
 
   @media(max-width:900px) {
     .metrics-grid { grid-template-columns:repeat(2,1fr); }
@@ -234,11 +231,7 @@
 <nav class="tabs"></nav>
 
 <main>
-  <div class="demo-row">
-    <span class="demo-label">Quick Preview</span>
-    <button class="btn-demo" onclick="loadDemoData()">Load Sample Data</button>
-    <button class="btn-demo" onclick="clearData()">Clear</button>
-  </div>
+
 
   <div class="panel  active" id="panel-loc1-month"><div id="loc1-month-content"><div class="empty-state"><div class="empty-icon">◇</div><div class="empty-title">No Data Loaded</div><div class="empty-sub">Paste your Google Sheet URLs above or load sample data.</div></div></div></div>
   <div class="panel" id="panel-loc2-month"><div id="loc2-month-content"><div class="empty-state"><div class="empty-icon">◇</div><div class="empty-title">No Data Loaded</div><div class="empty-sub">Paste your Google Sheet URLs above or load sample data.</div></div></div></div>
