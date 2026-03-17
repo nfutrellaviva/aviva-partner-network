@@ -491,7 +491,7 @@ function loadAll() {
       renderDashboard(finRows, orderedLocs);
 
       var periods = finRows.map(function(r){ return r.month; }).filter(function(v,i,a){ return a.indexOf(v)===i; }).join(', ');
-      setStatus('✓ Live from Partner Scorecard — ' + finRows.length + ' submissions (' + periods + ')' + (goalsUrl ? ' + goals' : ''), 'ok');
+      setStatus('✓ Live from Partner Scorecard — ' + finRows.length + ' submissions (' + periods + ')', 'ok');
 
       // Goals are stored locally in browser — no fetch needed
     })
@@ -832,7 +832,7 @@ function renderGoalCard(g, idx, slot, locName) {
   card += '<div class="goal-date-field"><span class="goal-date-label-txt">Date Set</span><input class="goal-date-input" id="gds-'+cardId+'" value="'+escAttr(g.dateSet||'')+'" placeholder="e.g. Jan 2026" /></div>';
   card += '<div class="goal-date-field"><span class="goal-date-label-txt">Target Date</span><input class="goal-date-input" id="gdt-'+cardId+'" value="'+escAttr(g.targetDate||'')+'" placeholder="e.g. Jun 2026" /></div>';
   card += '</div>';
-  card += '<button class="goal-notes-toggle" onclick="toggleNotes(''+cardId+'')">';
+  card += '<button class="goal-notes-toggle" onclick="toggleNotes(this)" data-card="'+cardId+'">';
   card += '<span class="toggle-arrow" id="arr-'+cardId+'">&#9654;</span> Follow-Up Notes';
   if (noteList.length) card += ' <span style="color:var(--text-muted);font-size:9px;margin-left:4px">('+noteList.length+')</span>';
   card += '</button>';
@@ -949,7 +949,8 @@ function flashSaved(slot) {
   setTimeout(function(){ el.classList.remove('show'); }, 1800);
 }
 
-function toggleNotes(cardId) {
+function toggleNotes(btn) {
+  var cardId = btn.dataset.card;
   var b = document.getElementById('nb-'+cardId);
   var a = document.getElementById('arr-'+cardId);
   if (!b) return;
