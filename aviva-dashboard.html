@@ -780,13 +780,20 @@ function buildGoalCards(goals, slot, locName) {
   });
 
   html += '</div>';
-  html += '<button class="btn-add-goal" onclick="addGoal(''+slot+'',''+escAttr(locName)+'')">+ Add Goal</button>';
+  html += '<button class="btn-add-goal" data-slot="'+slot+'" data-loc="'+escAttr(locName)+'" onclick="addGoalClick(this)">+ Add Goal</button>';
   html += '</div>';
   return html;
 }
 
 function escAttr(s) {
-  return s.replace(/'/g, "\'").replace(/"/g, '&quot;');
+  if (!s) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function q(s) {
+  // Wrap a string value safely for use in an onclick="..." attribute
+  // Uses &#39; for single quotes so the HTML attribute stays valid
+  return "'" + escAttr(String(s || '')) + "'";
 }
 
 function renderGoalCard(g, idx, slot, locName) {
@@ -809,14 +816,14 @@ function renderGoalCard(g, idx, slot, locName) {
   notesHtml += '<div class="add-note-row">'
     + '<input class="note-date-new" id="nd-'+cardId+'" placeholder="'+todayStr()+'" value="" />'
     + '<textarea class="note-text-new" id="nt-'+cardId+'" placeholder="Add a follow-up note..." rows="2"></textarea>'
-    + '<button class="btn-add-note" onclick="addNote(''+slot+'',''+escAttr(locName)+'','+idx+')">Add</button>'
+    + '<button class="btn-add-note" data-slot="'+slot+'" data-loc="'+escAttr(locName)+'" data-idx="'+idx+'" onclick="addNoteClick(this)">Add</button>'
     + '</div>';
 
   var card = '<div class="goal-card status-'+sc+'" id="card-'+cardId+'" style="'+(isAchieved?'opacity:.7':'')+'">';
   card += '<div class="goal-card-inner">';
   card += '<div class="goal-card-top">';
   card += '<input class="goal-title-input" id="gt-'+cardId+'" value="'+escAttr(g.title||'')+'" placeholder="Goal title..." />';
-  card += '<select class="status-select s-'+sc+'" id="gs-'+cardId+'" onchange="onStatusChange(this,''+slot+'',''+escAttr(locName)+'','+idx+')">';
+  card += '<select class="status-select s-'+sc+'" id="gs-'+cardId+'" data-slot="'+slot+'" data-loc="'+escAttr(locName)+'" data-idx="'+idx+'" onchange="onStatusChangeClick(this)">';
   ['On Track','At Risk','Achieved','Paused','Not Started'].forEach(function(s) {
     card += '<option value="'+s+'"'+(g.status===s?' selected':'')+'>'+s+'</option>';
   });
@@ -832,12 +839,19 @@ function renderGoalCard(g, idx, slot, locName) {
   card += '</button>';
   card += '<div class="goal-notes-body" id="nb-'+cardId+'">'+notesHtml+'</div>';
   card += '<div class="goal-card-footer">';
-  card += '<button class="btn-del-goal" onclick="deleteGoal(''+slot+'',''+escAttr(locName)+'','+idx+')">Delete</button>';
-  card += '<button class="btn-save-goal" onclick="saveGoal(''+slot+'',''+escAttr(locName)+'','+idx+')">Save</button>';
+  card += '<button class="btn-del-goal" data-slot="'+slot+'" data-loc="'+escAttr(locName)+'" data-idx="'+idx+'" onclick="deleteGoalClick(this)">Delete</button>';
+  card += '<button class="btn-save-goal" data-slot="'+slot+'" data-loc="'+escAttr(locName)+'" data-idx="'+idx+'" onclick="saveGoalClick(this)">Save</button>';
   card += '</div>';
   card += '</div></div>';
   return card;
 }
+
+// ── Data-attribute click handlers (avoids inline quote escaping issues) ──
+function addGoalClick(btn) { addGoal(btn.dataset.slot, btn.dataset.loc); }
+function addNoteClick(btn) { addNote(btn.dataset.slot, btn.dataset.loc, parseInt(btn.dataset.idx)); }
+function saveGoalClick(btn) { saveGoal(btn.dataset.slot, btn.dataset.loc, parseInt(btn.dataset.idx)); }
+function deleteGoalClick(btn) { deleteGoal(btn.dataset.slot, btn.dataset.loc, parseInt(btn.dataset.idx)); }
+function onStatusChangeClick(sel) { onStatusChange(sel, sel.dataset.slot, sel.dataset.loc, parseInt(sel.dataset.idx)); }
 
 function addGoal(slot, locName) {
   var goals = getGoalsForLoc(locName);
