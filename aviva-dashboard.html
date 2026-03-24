@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aviva Aesthetics — Partner Goals</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js">
+// ── PIN LOCK ──
+var _PIN = '8325';
+var _goalsUnlocked = false;
+
+function checkPin() {
+  var entered = document.getElementById('pin-input').value;
+  var statusEl = document.getElementById('pin-status');
+  if (entered === _PIN) {
+    _goalsUnlocked = true;
+    document.body.classList.remove('goals-locked');
+    statusEl.textContent = '✓ Unlocked';
+    statusEl.className = 'pin-status unlocked';
+    document.getElementById('pin-input').value = '';
+  } else {
+    statusEl.textContent = 'Incorrect PIN';
+    statusEl.className = 'pin-status wrong';
+    document.getElementById('pin-input').value = '';
+    setTimeout(function() {
+      statusEl.textContent = 'Locked';
+      statusEl.className = 'pin-status';
+    }, 2000);
+  }
+}
+
+// Start locked
+document.addEventListener('DOMContentLoaded', function() {
+  document.body.classList.add('goals-locked');
+});
+
+</script>
+<style>
+  :root {
+    --black:      #0a0a0a;
+    --surface:    #111111;
+    --surface2:   #181818;
+    --surface3:   #222222;
+    --border:     rgba(255,255,255,0.07);
+    --gold:       #c9922a;
+    --gold-light: #e8b860;
+    --gold-dim:   rgba(201,146,42,0.15);
+    --text:       #f0ece4;
+    --text-muted: rgba(240,236,228,0.45);
+    --text-dim:   rgba(240,236,228,0.65);
+    --green:      #5a9e6f;
+    --green-dim:  rgba(90,158,111,0.15);
+    --red:        #b05555;
+    --red-dim:    rgba(176,85,85,0.15);
+    --blue:       #6aaabb;
+    --blue-dim:   rgba(106,170,187,0.15);
+    --yellow:     #aaaa55;
+    --yellow-dim: rgba(170,170,85,0.15);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background:var(--black); color:var(--text); font-family:'Jost',sans-serif; font-weight:300; min-height:100vh; overflow-x:hidden; }
+
+  header { display:flex; align-items:center; justify-content:space-between; padding:22px 40px; border-bottom:1px solid var(--border); background:var(--black); position:sticky; top:0; z-index:100; }
+  .logo { display:flex; flex-direction:column; line-height:1; }
+  .logo-main { font-family:'Jost',sans-serif; font-weight:200; font-size:22px; letter-spacing:.3em; color:var(--text); }
+  .logo-sub  { font-family:'Jost',sans-serif; font-weight:300; font-size:8.5px; letter-spacing:.55em; color:var(--text-muted); margin-top:3px; }
+  .header-right { display:flex; align-items:center; gap:20px; }
+  .header-label { font-size:10px; letter-spacing:.25em; color:var(--text-muted); text-transform:uppercase; }
+  .period-badge { background:var(--gold-dim); border:1px solid rgba(201,146,42,0.3); color:var(--gold-light); font-size:11px; letter-spacing:.12em; padding:6px 14px; border-radius:2px; }
+
+  .sheet-banner { background:var(--surface); border-bottom:1px solid var(--border); padding:10px 40px; display:flex; align-items:center; gap:14px; flex-wrap:wrap; }
+  .sheet-banner label { font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:var(--text-muted); white-space:nowrap; min-width:130px; }
+  .sheet-banner input { flex:1; min-width:220px; background:var(--surface2); border:1px solid var(--border); color:var(--text); font-family:'Jost',sans-serif; font-size:12px; padding:8px 14px; border-radius:2px; outline:none; transition:border-color .2s; }
+  .sheet-banner input:focus { border-color:var(--gold); }
+  .sheet-banner input::placeholder { color:var(--text-muted); }
+  .btn-load { background:var(--gold); color:#000; font-family:'Jost',sans-serif; font-size:10px; font-weight:500; letter-spacing:.2em; text-transform:uppercase; border:none; padding:9px 20px; cursor:pointer; border-radius:2px; transition:background .2s, transform .1s; }
+  .btn-load:hover { background:var(--gold-light); }
+  #status-msg { font-size:11px; letter-spacing:.08em; color:var(--text-muted); }
+  #status-msg.ok { color:var(--green); }
+  #status-msg.err { color:var(--red); }
+
+  /* ── TWO-ROW NAV ── */
+  nav.tabs { display:none; }
+  .nav-wrapper { background:var(--black); border-bottom:1px solid var(--border); }
+  .nav-row1 { display:flex; align-items:center; gap:0; padding:0 40px; border-bottom:1px solid var(--border); }
+  .view-btn { padding:13px 28px; font-size:10px; font-weight:400; letter-spacing:.2em; text-transform:uppercase; color:var(--text-muted); cursor:pointer; border-bottom:2px solid transparent; transition:color .2s, border-color .2s; white-space:nowrap; user-select:none; background:none; border-top:none; border-left:none; border-right:none; font-family:'Jost',sans-serif; }
+  .view-btn:hover { color:var(--text-dim); }
+  .view-btn.active { color:var(--gold-light); border-bottom-color:var(--gold); }
+  .nav-row2 { display:flex; align-items:center; gap:6px; padding:10px 40px; flex-wrap:wrap; }
+  .loc-pill { padding:6px 14px; font-size:10px; font-weight:400; letter-spacing:.1em; text-transform:uppercase; color:var(--text-muted); background:var(--surface2); border:1px solid var(--border); border-radius:2px; cursor:pointer; white-space:nowrap; user-select:none; transition:all .18s; font-family:'Jost',sans-serif; }
+  .loc-pill:hover { color:var(--text); border-color:rgba(201,146,42,0.3); }
+  .loc-pill.active { color:var(--gold-light); background:var(--gold-dim); border-color:rgba(201,146,42,0.5); }
+  .tab { display:none; }
+  .tab-group-label { display:none; }
+
+  main { padding:36px 40px 60px; }
+  .panel { display:none; }
+  .panel.active { display:block; }
+
+  .loc-header { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:28px; flex-wrap:wrap; gap:10px; }
+  .loc-title { font-family:'Cormorant Garamond',serif; font-size:32px; font-weight:300; letter-spacing:.04em; color:var(--text); }
+  .loc-month { font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--gold); }
+
+  .metrics-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:32px; }
+  .metric-card { background:var(--surface); border:1px solid var(--border); border-radius:3px; padding:24px 22px 20px; position:relative; overflow:hidden; transition:border-color .25s; }
+  .metric-card:hover { border-color:rgba(201,146,42,0.25); }
+  .metric-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:var(--gold); opacity:0; transition:opacity .25s; }
+  .metric-card:hover::before { opacity:1; }
+  .metric-card.revenue::before { opacity:1; }
+  .metric-label { font-size:9px; font-weight:400; letter-spacing:.3em; text-transform:uppercase; color:var(--text-muted); margin-bottom:14px; }
+  .metric-value { font-family:'Cormorant Garamond',serif; font-size:36px; font-weight:300; color:var(--text); letter-spacing:-.01em; margin-bottom:10px; }
+  .metric-pct-row { display:flex; align-items:center; justify-content:space-between; }
+  .metric-pct .pct-val { font-size:16px; font-weight:300; color:var(--gold-light); }
+  .metric-bar-track { height:2px; background:var(--surface3); border-radius:1px; margin-top:14px; overflow:hidden; }
+  .metric-bar-fill { height:100%; border-radius:1px; background:var(--gold); transition:width .6s cubic-bezier(.4,0,.2,1); }
+  .metric-card.cogs    .metric-bar-fill { background:#888; }
+  .metric-card.payroll .metric-bar-fill { background:#7a8ba8; }
+  .metric-card.net     .metric-bar-fill { background:var(--green); }
+  .metric-card.net.negative .metric-bar-fill { background:var(--red); }
+  .metric-card.net.negative .metric-pct .pct-val { color:#c07070; }
+
+  .section-title { font-size:10px; letter-spacing:.3em; text-transform:uppercase; color:var(--text-muted); margin-bottom:16px; }
+
+  table.metrics-table { width:100%; border-collapse:collapse; margin-bottom:32px; }
+  table.metrics-table thead tr { border-bottom:1px solid var(--border); }
+  table.metrics-table th { font-size:9px; letter-spacing:.25em; text-transform:uppercase; color:var(--text-muted); font-weight:400; padding:10px 14px; text-align:right; }
+  table.metrics-table th:first-child { text-align:left; }
+  table.metrics-table tbody tr { border-bottom:1px solid var(--border); transition:background .15s; }
+  table.metrics-table tbody tr:hover { background:var(--surface); }
+  table.metrics-table td { padding:14px; font-size:14px; font-weight:300; text-align:right; color:var(--text-dim); }
+  table.metrics-table td:first-child { text-align:left; color:var(--text); font-size:12px; letter-spacing:.08em; text-transform:uppercase; }
+
+  .chart-wrap { background:var(--surface); border:1px solid var(--border); border-radius:3px; padding:28px 28px 20px; }
+  .chart-wrap canvas { max-height:320px; }
+  .chart-legend { display:flex; gap:20px; flex-wrap:wrap; margin-top:18px; padding-top:16px; border-top:1px solid var(--border); }
+  .legend-item { display:flex; align-items:center; gap:7px; font-size:10px; letter-spacing:.15em; text-transform:uppercase; color:var(--text-muted); }
+  .legend-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+
+  /* ══ GOAL CARDS ══ */
+  .goals-section { margin:36px 0 32px; }
+  .goals-header-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; flex-wrap:wrap; gap:8px; }
+  .goals-count { font-size:10px; letter-spacing:.12em; color:var(--text-muted); background:var(--surface3); padding:3px 10px; border-radius:2px; }
+  .goal-cards-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)); gap:16px; }
+
+  .goal-card { background:var(--surface); border:1px solid var(--border); border-radius:3px; overflow:hidden; transition:border-color .25s, transform .2s; position:relative; }
+  .goal-card:hover { border-color:rgba(201,146,42,0.2); transform:translateY(-1px); }
+  .goal-card::before { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; }
+  .goal-card.status-on-track::before    { background:var(--green); }
+  .goal-card.status-at-risk::before     { background:#c07070; }
+  .goal-card.status-achieved::before    { background:var(--blue); }
+  .goal-card.status-paused::before      { background:var(--yellow); }
+  .goal-card.status-not-started::before { background:rgba(255,255,255,0.1); }
+  .goal-card.status-in-progress::before { background:#7a8ba8; }
+
+  .goal-card-inner { padding:18px 18px 0 20px; }
+  .goal-card-top { display:flex; align-items:flex-start; justify-content:space-between; gap:10px; margin-bottom:10px; }
+  .goal-title { font-size:13px; font-weight:400; letter-spacing:.06em; color:var(--text); line-height:1.35; flex:1; }
+
+  .status-badge { display:inline-flex; align-items:center; gap:5px; font-size:9px; font-weight:500; letter-spacing:.14em; text-transform:uppercase; padding:4px 9px; border-radius:2px; white-space:nowrap; flex-shrink:0; }
+  .status-dot { width:5px; height:5px; border-radius:50%; }
+  .badge-on-track    { background:var(--green-dim);  color:var(--green); }
+  .badge-at-risk     { background:var(--red-dim);    color:#c07070; }
+  .badge-achieved    { background:var(--blue-dim);   color:var(--blue); }
+  .badge-paused      { background:var(--yellow-dim); color:var(--yellow); }
+  .badge-not-started { background:rgba(255,255,255,0.05); color:var(--text-muted); }
+  .dot-on-track    { background:var(--green); }
+  .dot-at-risk     { background:#c07070; }
+  .dot-achieved    { background:var(--blue); }
+  .dot-paused      { background:var(--yellow); }
+  .dot-not-started { background:var(--text-muted); }
+
+  .goal-desc { font-size:11px; color:var(--text-muted); line-height:1.6; margin-bottom:12px; letter-spacing:.02em; }
+  .goal-dates { display:flex; gap:20px; margin-bottom:14px; flex-wrap:wrap; }
+  .goal-date-item { display:flex; flex-direction:column; gap:2px; }
+  .goal-date-label { font-size:8px; letter-spacing:.2em; text-transform:uppercase; color:var(--text-muted); }
+  .goal-date-val   { font-size:11px; color:var(--text-dim); }
+
+  .goal-notes-toggle { display:flex; align-items:center; gap:8px; font-size:9px; letter-spacing:.18em; text-transform:uppercase; color:var(--gold); cursor:pointer; padding:12px 0; border-top:1px solid var(--border); background:none; border-left:none; border-right:none; border-bottom:none; width:100%; text-align:left; transition:color .2s; }
+  .goal-notes-toggle:hover { color:var(--gold-light); }
+  .toggle-arrow { font-size:8px; transition:transform .2s; display:inline-block; }
+  .toggle-arrow.open { transform:rotate(90deg); }
+
+  .goal-notes-body { display:none; border-top:1px solid var(--border); padding:2px 0 10px; }
+  .goal-notes-body.visible { display:block; }
+  .note-entry { display:flex; gap:10px; padding:9px 0; border-bottom:1px solid rgba(255,255,255,0.04); }
+  .note-entry:last-child { border-bottom:none; }
+  .note-date { font-size:9px; letter-spacing:.1em; color:var(--gold); white-space:nowrap; min-width:70px; padding-top:1px; }
+  .note-text { font-size:11px; color:var(--text-dim); line-height:1.55; flex:1; }
+
+  .no-goals { background:var(--surface); border:1px solid var(--border); border-radius:3px; padding:28px; text-align:center; color:var(--text-muted); font-size:12px; letter-spacing:.08em; line-height:1.7; }
+
+  .empty-state { display:flex; flex-direction:column; align-items:center; justify-content:center; padding:80px 20px; text-align:center; gap:14px; }
+  .empty-icon { font-size:40px; opacity:.2; }
+  .empty-title { font-family:'Cormorant Garamond',serif; font-size:24px; font-weight:300; color:var(--text-dim); }
+  .empty-sub { font-size:12px; letter-spacing:.1em; color:var(--text-muted); max-width:440px; line-height:1.7; }
+
+  .setup-guide { background:var(--surface); border:1px solid var(--border); border-radius:3px; padding:32px; margin-bottom:32px; }
+  .setup-title { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:300; color:var(--text); margin-bottom:20px; }
+  .setup-steps { display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr)); gap:20px; }
+  .setup-step { display:flex; gap:14px; align-items:flex-start; }
+  .step-num { width:26px; height:26px; border-radius:50%; background:var(--gold-dim); border:1px solid rgba(201,146,42,0.4); color:var(--gold-light); font-size:11px; font-weight:500; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; }
+  .step-text { font-size:12px; line-height:1.65; color:var(--text-dim); letter-spacing:.02em; }
+  .step-text strong { display:block; font-weight:400; color:var(--text); margin-bottom:3px; letter-spacing:.05em; }
+  .step-text code { background:var(--surface3); padding:1px 6px; border-radius:2px; font-size:11px; color:var(--gold-light); font-family:monospace; }
+
+
+
+  @media(max-width:900px) {
+    .metrics-grid { grid-template-columns:repeat(2,1fr); }
+    header,nav.tabs,main,.sheet-banner { padding-left:20px; padding-right:20px; }
+  }
+  @media(max-width:560px) {
+    .metrics-grid { grid-template-columns:1fr; }
+    .goal-cards-grid { grid-template-columns:1fr; }
+  }
+
+  /* ══ GOAL EDITOR ══ */
+  .goals-section { margin:36px 0 32px; }
+  .goals-header-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; flex-wrap:wrap; gap:8px; }
+  .goals-count { font-size:10px; letter-spacing:.12em; color:var(--text-muted); background:var(--surface3); padding:3px 10px; border-radius:2px; }
+  .goal-cards-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)); gap:16px; }
+
+  .goal-card { background:var(--surface); border:1px solid var(--border); border-radius:3px; overflow:hidden; position:relative; transition:border-color .2s; }
+  .goal-card:hover { border-color:rgba(201,146,42,0.2); }
+  .goal-card::before { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; }
+  .goal-card.status-on-track::before    { background:var(--green); }
+  .goal-card.status-at-risk::before     { background:#c07070; }
+  .goal-card.status-achieved::before    { background:var(--blue); }
+  .goal-card.status-paused::before      { background:var(--yellow); }
+  .goal-card.status-not-started::before { background:rgba(255,255,255,0.1); }
+  .goal-card.status-in-progress::before { background:#7a8ba8; }
+
+  .goal-card-inner { padding:16px 16px 0 18px; }
+  .goal-card-top { display:flex; align-items:flex-start; justify-content:space-between; gap:8px; margin-bottom:8px; }
+
+  .goal-title-input {
+    font-size:13px; font-weight:400; letter-spacing:.06em; color:var(--text);
+    background:transparent; border:none; outline:none; flex:1;
+    font-family:'Jost',sans-serif; padding:0;
+    border-bottom:1px solid transparent; transition:border-color .2s;
+  }
+  .goal-title-input:focus { border-bottom-color:var(--gold); }
+  .goal-title-input::placeholder { color:var(--text-muted); font-style:italic; }
+
+  .status-select {
+    font-size:9px; font-weight:500; letter-spacing:.14em; text-transform:uppercase;
+    padding:4px 8px; border-radius:2px; border:none; cursor:pointer;
+    font-family:'Jost',sans-serif; flex-shrink:0; outline:none;
+  }
+  .status-select.s-on-track    { background:var(--green-dim);  color:var(--green); }
+  .status-select.s-at-risk     { background:var(--red-dim);    color:#c07070; }
+  .status-select.s-achieved    { background:var(--blue-dim);   color:var(--blue); }
+  .status-select.s-paused      { background:var(--yellow-dim); color:var(--yellow); }
+  .status-select.s-not-started { background:rgba(255,255,255,0.05); color:var(--text-muted); }
+  .status-select.s-in-progress { background:rgba(122,139,168,0.15); color:#9aaecc; }
+
+  .goal-desc-input {
+    width:100%; background:transparent; border:none; outline:none;
+    font-size:11px; color:var(--text-muted); line-height:1.6; letter-spacing:.02em;
+    font-family:'Jost',sans-serif; resize:none; padding:0; margin-bottom:8px;
+    border-bottom:1px solid transparent; transition:border-color .2s; min-height:36px;
+  }
+  .goal-desc-input:focus { border-bottom-color:rgba(255,255,255,0.1); color:var(--text-dim); }
+  .goal-desc-input::placeholder { color:var(--text-muted); font-style:italic; }
+
+  .goal-dates-row { display:flex; gap:16px; margin-bottom:10px; flex-wrap:wrap; }
+  .goal-date-field { display:flex; flex-direction:column; gap:3px; }
+  .goal-date-label-txt { font-size:8px; letter-spacing:.2em; text-transform:uppercase; color:var(--text-muted); }
+  .goal-date-input {
+    font-size:11px; color:var(--text-dim); background:transparent; border:none;
+    outline:none; font-family:'Jost',sans-serif; border-bottom:1px solid transparent;
+    transition:border-color .2s; width:100px; padding:1px 0;
+  }
+  .goal-date-input:focus { border-bottom-color:var(--gold); }
+  .goal-date-input::placeholder { color:var(--text-muted); font-style:italic; }
+
+  .goal-notes-toggle { display:flex; align-items:center; gap:8px; font-size:9px; letter-spacing:.18em; text-transform:uppercase; color:var(--gold); cursor:pointer; padding:10px 0; border-top:1px solid var(--border); background:none; border-left:none; border-right:none; border-bottom:none; width:100%; text-align:left; transition:color .2s; font-family:'Jost',sans-serif; }
+  .goal-notes-toggle:hover { color:var(--gold-light); }
+  .toggle-arrow { font-size:8px; transition:transform .2s; display:inline-block; }
+  .toggle-arrow.open { transform:rotate(90deg); }
+
+  .goal-notes-body { display:none; border-top:1px solid var(--border); padding:10px 0 6px; }
+  .goal-notes-body.visible { display:block; }
+
+  .notes-thread { margin-bottom:8px; }
+  .note-entry { display:flex; gap:10px; padding:7px 0; border-bottom:1px solid rgba(255,255,255,0.04); }
+  .note-entry:last-child { border-bottom:none; }
+  .note-date-txt { font-size:9px; letter-spacing:.1em; color:var(--gold); white-space:nowrap; min-width:70px; padding-top:2px; }
+  .note-text-txt { font-size:11px; color:var(--text-dim); line-height:1.55; flex:1; }
+
+  .add-note-row { display:flex; gap:8px; align-items:flex-start; margin-top:6px; }
+  .note-date-new { font-size:10px; color:var(--text-muted); background:transparent; border:none; outline:none; font-family:'Jost',sans-serif; border-bottom:1px solid var(--border); width:72px; padding:4px 0; transition:border-color .2s; }
+  .note-date-new:focus { border-bottom-color:var(--gold); }
+  .note-text-new { flex:1; background:var(--surface2); border:1px solid var(--border); border-radius:2px; color:var(--text); font-family:'Jost',sans-serif; font-size:11px; padding:6px 10px; outline:none; resize:none; min-height:32px; transition:border-color .2s; }
+  .note-text-new:focus { border-color:rgba(201,146,42,0.4); }
+  .note-text-new::placeholder { color:var(--text-muted); }
+  .btn-add-note { background:var(--gold-dim); border:1px solid rgba(201,146,42,0.3); color:var(--gold-light); font-family:'Jost',sans-serif; font-size:9px; letter-spacing:.15em; text-transform:uppercase; padding:6px 12px; cursor:pointer; border-radius:2px; white-space:nowrap; transition:all .2s; }
+  .btn-add-note:hover { background:var(--gold); color:#000; }
+
+  .goal-card-footer { display:flex; justify-content:flex-end; padding:6px 0 10px; gap:8px; }
+  .btn-del-goal { background:transparent; border:none; color:var(--text-muted); font-size:9px; letter-spacing:.1em; text-transform:uppercase; cursor:pointer; font-family:'Jost',sans-serif; transition:color .2s; padding:4px 0; }
+  .btn-del-goal:hover { color:#c07070; }
+  .btn-save-goal { background:transparent; border:none; color:var(--gold); font-size:9px; letter-spacing:.1em; text-transform:uppercase; cursor:pointer; font-family:'Jost',sans-serif; transition:color .2s; padding:4px 0; }
+  .btn-save-goal:hover { color:var(--gold-light); }
+
+  .btn-add-goal { background:transparent; border:1px dashed rgba(201,146,42,0.3); color:var(--gold); font-family:'Jost',sans-serif; font-size:10px; letter-spacing:.15em; text-transform:uppercase; padding:12px 20px; cursor:pointer; border-radius:3px; width:100%; transition:all .2s; margin-top:4px; }
+  .btn-add-goal:hover { background:var(--gold-dim); border-color:var(--gold); }
+
+  .no-goals-msg { text-align:center; padding:24px; color:var(--text-muted); font-size:12px; letter-spacing:.08em; }
+
+  .save-indicator { font-size:9px; letter-spacing:.12em; color:var(--green); opacity:0; transition:opacity .3s; }
+  .save-indicator.show { opacity:1; }
+
+
+  /* ── PIN LOCK ── */
+  .pin-lock-bar {
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+    padding: 8px 40px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .pin-lock-label {
+    font-size: 10px;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+  .pin-input {
+    background: var(--surface3);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'Jost', sans-serif;
+    font-size: 13px;
+    letter-spacing: .3em;
+    padding: 6px 12px;
+    border-radius: 2px;
+    outline: none;
+    width: 90px;
+    transition: border-color .2s;
+  }
+  .pin-input:focus { border-color: var(--gold); }
+  .btn-pin-unlock {
+    background: var(--gold-dim);
+    border: 1px solid rgba(201,146,42,0.3);
+    color: var(--gold-light);
+    font-family: 'Jost', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    padding: 7px 16px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all .2s;
+  }
+  .btn-pin-unlock:hover { background: var(--gold); color: #000; }
+  .pin-status {
+    font-size: 10px;
+    letter-spacing: .12em;
+    color: var(--text-muted);
+  }
+  .pin-status.unlocked { color: var(--green); }
+  .pin-status.wrong    { color: var(--red); }
+  /* Hide edit controls when locked */
+  body.goals-locked .btn-add-goal,
+  body.goals-locked .btn-save-goal,
+  body.goals-locked .btn-del-goal,
+  body.goals-locked .btn-add-note,
+  body.goals-locked .add-note-row,
+  body.goals-locked .goal-card-footer { display: none !important; }
+  body.goals-locked .goal-title-input,
+  body.goals-locked .goal-desc-input,
+  body.goals-locked .goal-date-input,
+  body.goals-locked .status-select { pointer-events: none; opacity: .7; }
+
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <span class="logo-main">AVIVA</span>
+    <span class="logo-sub">AESTHETICS</span>
+  </div>
+  <div class="header-right">
+    <span class="header-label">Partner Goals</span>
+    <span class="period-badge" id="current-period">— / —</span>
+  </div>
+</header>
+
+<div class="sheet-banner">
+  <label>Partner Scorecard</label>
+  <span style="font-size:11px;color:var(--text-muted);letter-spacing:.04em;">Auto-connected to Aviva Partner Scorecard</span>
+  <button class="btn-load" onclick="loadAll()">Load Data</button>
+  <span id="status-msg"></span>
+</div>
+<div class="pin-lock-bar">
+  <span class="pin-lock-label">Goal Editing</span>
+  <input class="pin-input" type="password" id="pin-input" placeholder="····" maxlength="6" onkeydown="if(event.key==='Enter')checkPin()" />
+  <button class="btn-pin-unlock" onclick="checkPin()">Unlock</button>
+  <span class="pin-status" id="pin-status">Locked</span>
+</div>
+
+
+<div class="nav-wrapper">
+  <div class="nav-row1">
+    <button class="view-btn active" data-view="month" onclick="pickView(this)">Current Month</button>
+    <button class="view-btn" data-view="trend" onclick="pickView(this)">Month-by-Month Trend</button>
+  </div>
+  <div class="nav-row2">
+    <div class="loc-pill  active" data-slot="loc1" onclick="pickLoc(this)">Aura Aesthetics</div>
+    <div class="loc-pill" data-slot="loc2" onclick="pickLoc(this)">Pura Vida - Maple Lawn</div>
+    <div class="loc-pill" data-slot="loc3" onclick="pickLoc(this)">Pure Regenerative</div>
+    <div class="loc-pill" data-slot="loc4" onclick="pickLoc(this)">IAesthetic MedSpa</div>
+    <div class="loc-pill" data-slot="loc5" onclick="pickLoc(this)">Renew MedSpa</div>
+    <div class="loc-pill" data-slot="loc6" onclick="pickLoc(this)">Illume Aesthetics</div>
+    <div class="loc-pill" data-slot="loc7" onclick="pickLoc(this)">Luminate Clinic</div>
+    <div class="loc-pill" data-slot="loc8" onclick="pickLoc(this)">Youthtopia MedSpa</div>
+    <div class="loc-pill" data-slot="loc9" onclick="pickLoc(this)">Chrome Aesthetics</div>
+    <div class="loc-pill" data-slot="loc10" onclick="pickLoc(this)">Urban - Gilbert</div>
+    <div class="loc-pill" data-slot="loc11" onclick="pickLoc(this)">Urban - Fishersville</div>
+    <div class="loc-pill" data-slot="loc12" onclick="pickLoc(this)">Pura Vida - Marriottsville</div>
+  </div>
+</div>
+<nav class="tabs"></nav>
+
+<main>
+
+
+  <div class="panel  active" id="panel-loc1-month"><div id="loc1-month-content"><div class="empty-state"><div class="empty-icon">◇</div><div class="empty-title">No Data Loaded</div><div class="empty-sub">Paste your Google Sheet URLs above or load sample data.</div></div></div></div>
+  <div class="panel" id="panel-loc2-month"><div id="loc2-month-content"><div class="empty-state"><div class="empty-icon">◇</div><div class="empty-title">No Data Loaded</div><div class="empty-sub">Paste your Google Sheet URLs above or load sample data.</div></div></div></div>
+  <div class="panel" id="panel-loc3-month"><div id="loc3-month-content"><div class="empty-state"><div class="empty-icon">◇</div><div class="empty-title">No Data Loaded</div><div class="empty-sub">Paste your Google Sheet URLs above or load sample data.</div></div></div></div>
+  <div class="panel" id="panel-loc4-month"><div id="loc4-month-content"><div class="empty-state"><div class="empty-icon">◇</div><div class="empty-title">No Data Loaded</div><div class="empty-sub">Paste your Google Sheet URLs above or load sample data.</div></div></div></div>
+  <div class="panel" id="panel-loc5-month"><div id="loc5-month-content"><div class="empty-state"><div class="empty-icon">◇</div><div class="empty-title">No Data Loaded</div><div class="empty-sub">Paste your Google Sheet URLs above or load sample data.</div></div></div></div>
+  <div class="panel" id="panel-loc6-month"><div id="loc6-month-content"><div class="empty-state"><div class="empty-icon">◇</div><div class="empty-title">No Data Loaded</div><div class="empty-sub">Paste your Google Sheet URLs above or load sample data.</div></div></div></div>
+  <div class="panel" id="panel-loc7-month"><div id="loc7-month-content"><div class="empty-state"><div class="empty-icon">◇</div><div class="empty-title">No Data Loaded</div><div class="empty-sub">Paste your Google Sheet URLs above or load sample data.</div></div></div></div>
+  <div class="panel" id="panel-loc8-month"><div id="loc8-month-content"><div class="empty-state"><div class="empty-icon">◇</div><div class="empty-title">No Data Loaded</div><div class="empty-sub">Paste your Google Sheet URLs above or load sample data.</div></div></div></div>
+  <div class="panel" id="panel-loc9-month"><div id="loc9-month-content"><div class="empty-state"><div class="empty-icon">◇</div><div class="empty-title">No Data Loaded</div><div class="empty-sub">Paste your Google Sheet URLs above or load sample data.</div></div></div></div>
+  <div class="panel" id="panel-loc10-month"><div id="loc10-month-content"><div class="empty-state"><div class="empty-icon">◇</div><div class="empty-title">No Data Loaded</div><div class="empty-sub">Paste your Google Sheet URLs above or load sample data.</div></div></div></div>
+  <div class="panel" id="panel-loc11-month"><div id="loc11-month-content"><div class="empty-state"><div class="empty-icon">◇</div><div class="empty-title">No Data Loaded</div><div class="empty-sub">Paste your Google Sheet URLs above or load sample data.</div></div></div></div>
+  <div class="panel" id="panel-loc1-trend"><div id="loc1-trend-content"><div class="empty-state"><div class="empty-icon">◇</div><div class="empty-title">No Data Loaded</div><div class="empty-sub">Load data to view trend and goals.</div></div></div></div>
+  <div class="panel" id="panel-loc2-trend"><div id="loc2-trend-content"><div class="empty-state"><div class="empty-icon">◇</div><div class="empty-title">No Data Loaded</div><div class="empty-sub">Load data to view trend and goals.</div></div></div></div>
+  <div class="panel" id="panel-loc3-trend"><div id="loc3-trend-content"><div class="empty-state"><div class="empty-icon">◇</div><div class="empty-title">No Data Loaded</div><div class="empty-sub">Load data to view trend and goals.</div></div></div></div>
+  <div class="panel" id="panel-loc4-trend"><div id="loc4-trend-content"><div class="empty-state"><div class="empty-icon">◇</div><div class="empty-title">No Data Loaded</div><div class="empty-sub">Load data to view trend and goals.</div></div></div></div>
+  <div class="panel" id="panel-loc5-trend"><div id="loc5-trend-content"><div class="empty-state"><div class="empty-icon">◇</div><div class="empty-title">No Data Loaded</div><div class="empty-sub">Load data to view trend and goals.</div></div></div></div>
+  <div class="panel" id="panel-loc6-trend"><div id="loc6-trend-content"><div class="empty-state"><div class="empty-icon">◇</div><div class="empty-title">No Data Loaded</div><div class="empty-sub">Load data to view trend and goals.</div></div></div></div>
+  <div class="panel" id="panel-loc7-trend"><div id="loc7-trend-content"><div class="empty-state"><div class="empty-icon">◇</div><div class="empty-title">No Data Loaded</div><div class="empty-sub">Load data to view trend and goals.</div></div></div></div>
+  <div class="panel" id="panel-loc8-trend"><div id="loc8-trend-content"><div class="empty-state"><div class="empty-icon">◇</div><div class="empty-title">No Data Loaded</div><div class="empty-sub">Load data to view trend and goals.</div></div></div></div>
+  <div class="panel" id="panel-loc9-trend"><div id="loc9-trend-content"><div class="empty-state"><div class="empty-icon">◇</div><div class="empty-title">No Data Loaded</div><div class="empty-sub">Load data to view trend and goals.</div></div></div></div>
+  <div class="panel" id="panel-loc10-trend"><div id="loc10-trend-content"><div class="empty-state"><div class="empty-icon">◇</div><div class="empty-title">No Data Loaded</div><div class="empty-sub">Load data to view trend and goals.</div></div></div></div>
+  <div class="panel" id="panel-loc11-trend"><div id="loc11-trend-content"><div class="empty-state"><div class="empty-icon">◇</div><div class="empty-title">No Data Loaded</div><div class="empty-sub">Load data to view trend and goals.</div></div></div></div>
+  <div class="panel" id="panel-loc12-month"><div id="loc12-month-content"><div class="empty-state"><div class="empty-icon">◇</div><div class="empty-title">No Data Loaded</div><div class="empty-sub">Paste your Google Sheet URLs above or load sample data.</div></div></div></div>
+  <div class="panel" id="panel-loc12-trend"><div id="loc12-trend-content"><div class="empty-state"><div class="empty-icon">◇</div><div class="empty-title">No Data Loaded</div><div class="empty-sub">Load data to view trend and goals.</div></div></div></div>
+
+  <div class="setup-guide" style="margin-top:40px;">
+    <div class="setup-title">How This Dashboard Works</div>
+    <div class="setup-steps">
+      <div class="setup-step"><div class="step-num">1</div><div class="step-text"><strong>Financials — Auto-Loaded</strong>Revenue, COGs, Payroll, and Net Income pull live from the Aviva Partner Scorecard. Click <code>Load Data</code> to refresh.</div></div>
+      <div class="setup-step"><div class="step-num">2</div><div class="step-text"><strong>Goals — Built In</strong>Go to any location's <code>Trend</code> tab to add goals and follow-up notes directly. Everything saves automatically in your browser.</div></div>
+      <div class="setup-step"><div class="step-num">3</div><div class="step-text"><strong>Partners Not Showing?</strong>Partners who have not yet submitted to the scorecard will show <code>—</code> on their tiles until they submit.</div></div>
+    </div>
+  </div>
+</main>
+
+<script>
+let chartInstances = {};
+let goalsData = [];
+
+// State
+var _currentView = 'month';
+var _currentSlot = 'loc1';
+
+function pickView(btn) {
+  document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  _currentView = btn.dataset.view;
+  showPanel();
+}
+
+function pickLoc(pill) {
+  document.querySelectorAll('.loc-pill').forEach(p => p.classList.remove('active'));
+  pill.classList.add('active');
+  _currentSlot = pill.dataset.slot;
+  showPanel();
+}
+
+function showPanel() {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  var panelId = 'panel-' + _currentSlot + '-' + _currentView;
+  var el = document.getElementById(panelId);
+  if (el) el.classList.add('active');
+}
+
+// Legacy compat
+function switchTab(el) {
+  var tab = el.dataset.tab;
+  var parts = tab.split('-');
+  _currentSlot = parts[0];
+  _currentView = parts[1];
+  showPanel();
+}
+
+function fmt$(n) {
+  if (n == null || isNaN(n)) return '—';
+  return (n < 0 ? '–$' : '$') + Math.abs(n).toLocaleString('en-US', {maximumFractionDigits:0});
+}
+function fmtPct(v) {
+  if (v == null || isNaN(v)) return '—';
+  return (v >= 0 ? '' : '–') + Math.abs(v).toFixed(1) + '%';
+}
+function pct(a, b) { return b ? (a/b)*100 : 0; }
+
+// ── Scorecard data store ──
+var scorecardData = {};  // { 'Practice Name': { months: { 'Jan 2026': {rev,cogs,pay,net} } } }
+
+// Parse a gviz date string like "Date(2026,0,1)" → "Jan 2026"
+function parseGvizDate(d) {
+  if (!d) return null;
+  var m = String(d).match(/Date\((\d+),(\d+),(\d+)\)/);
+  if (!m) return d;
+  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return months[parseInt(m[2])] + ' ' + m[1];
+}
+
+// ── JSONP loader (bypasses CORS — no fetch needed) ──
+function loadViaJSONP(url, callbackName) {
+  return new Promise(function(resolve, reject) {
+    var timeout = setTimeout(function() {
+      cleanup();
+      reject(new Error('Request timed out — check your network connection'));
+    }, 12000);
+    function cleanup() {
+      clearTimeout(timeout);
+      delete window[callbackName];
+      var old = document.getElementById('jsonp-' + callbackName);
+      if (old) old.parentNode.removeChild(old);
+    }
+    window[callbackName] = function(data) {
+      cleanup();
+      resolve(data);
+    };
+    var script = document.createElement('script');
+    script.id = 'jsonp-' + callbackName;
+    script.src = url;
+    script.onerror = function() { cleanup(); reject(new Error('Failed to load data — check the URL and make sure the sheet is published publicly')); };
+    document.head.appendChild(script);
+  });
+}
+
+function processGvizData(json) {
+  var cols = json.table.cols.map(function(c){ return c.label; });
+  var rawRows = json.table.rows;
+  var finRows = [];
+  rawRows.forEach(function(row) {
+    var obj = {};
+    row.c.forEach(function(cell, i){ obj[cols[i]] = cell ? cell.v : null; });
+    var practice = obj['Practice Name'];
+    var monthStr = parseGvizDate(obj['Reporting Period']);
+    if (!practice || !monthStr) return;
+    var rev   = parseFloat(obj['Total Net Revenue'] || 0);
+    var cogsP = parseFloat(obj['COGs %'] || 0);
+    var payP  = parseFloat(obj['Payroll %'] || 0);
+    var netP  = parseFloat(obj['Net Income/EBITDA %'] || 0);
+    finRows.push({
+      location: practice, month: monthStr,
+      revenue:  rev,
+      cogs:     Math.round(rev * cogsP / 100),
+      payroll:  Math.round(rev * payP  / 100),
+      net:      Math.round(rev * netP  / 100)
+    });
+  });
+  return finRows;
+}
+
+function loadAll() {
+  setStatus('Loading…','');
+  var SHEET_ID = '1-pixu1e2mUvWQjb6ovMpvAz_48OkHOwk2lPBEeIy_OY';
+  // Goals handled locally via localStorage
+  var cbName = '_gvizCb_' + Date.now();
+  var jsonpUrl = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID
+    + '/gviz/tq?tqx=out:json;responseHandler:' + cbName + '&sheet=Submissions&t=' + Date.now();
+
+  loadViaJSONP(jsonpUrl, cbName)
+    .then(function(json) {
+      var finRows = processGvizData(json);
+      if (!finRows.length) throw new Error('No submissions found in the scorecard yet');
+
+      var ALL_LOCS = ['Aura Aesthetics','Pura Vida MedSpa — Maple Lawn','Pura Vida MedSpa — Marriottsville','Pure Regenerative Medicine','IAesthetic MedSpa','Renew MedSpa','Illume Aesthetics','Luminate Clinic','Youthtopia MedSpa','Chrome Aesthetics Spa','Urban Aesthetics Gilbert','Urban Aesthetics Fishersville'];
+      var dataLocs = finRows.map(function(r){ return r.location; }).filter(function(v,i,a){ return a.indexOf(v)===i; });
+      var orderedLocs = ALL_LOCS.filter(function(l){ return dataLocs.indexOf(l) >= 0; })
+        .concat(ALL_LOCS.filter(function(l){ return dataLocs.indexOf(l) < 0; }));
+
+      renderDashboard(finRows, orderedLocs);
+
+      var periods = finRows.map(function(r){ return r.month; }).filter(function(v,i,a){ return a.indexOf(v)===i; }).join(', ');
+      setStatus('✓ Live from Partner Scorecard — ' + finRows.length + ' submissions (' + periods + ')', 'ok');
+
+      // Goals are stored locally in browser — no fetch needed
+    })
+    .catch(function(e) {
+      setStatus('Error: ' + e.message, 'err');
+    });
+}
+
+function setStatus(msg, cls) {
+  const el = document.getElementById('status-msg');
+  el.textContent = msg; el.className = cls;
+}
+
+function loadDemoData() {
+  const MONTHS = ['Jan 2025','Feb 2025','Mar 2025','Apr 2025','May 2025','Jun 2025',
+                  'Jul 2025','Aug 2025','Sep 2025','Oct 2025','Nov 2025','Dec 2025',
+                  'Jan 2026','Feb 2026','Mar 2026'];
+  const LOCS = ['Aura Aesthetics', 'Pura Vida MedSpa — Maple Lawn', 'Pure Regenerative Medicine', 'IAesthetic MedSpa', 'Renew MedSpa', 'Illume Aesthetics', 'Luminate Clinic', 'Youthtopia MedSpa', 'Chrome Aesthetics Spa', 'Urban Aesthetics Gilbert', 'Urban Aesthetics Fishersville'];
+  const seeds = [{rev:120000,cogs:35000,pay:40000},{rev:95000,cogs:28000,pay:33000},{rev:145000,cogs:42000,pay:48000},{rev:120000,cogs:35000,pay:40000},{rev:95000,cogs:28000,pay:33000},{rev:145000,cogs:42000,pay:48000},{rev:120000,cogs:35000,pay:40000},{rev:95000,cogs:28000,pay:33000},{rev:145000,cogs:42000,pay:48000},{rev:120000,cogs:35000,pay:40000},{rev:95000,cogs:28000,pay:33000}];
+  const rows = [];
+  LOCS.forEach((loc,li) => MONTHS.forEach((mo,mi) => {
+    const s = seeds[li];
+    const rev=s.rev+(Math.random()-.45)*s.rev*.25+mi*800, cogs=s.cogs+(Math.random()-.45)*s.cogs*.2, pay=s.pay+(Math.random()-.4)*s.pay*.1;
+    rows.push({location:loc,month:mo,revenue:Math.round(rev),cogs:Math.round(cogs),payroll:Math.round(pay),net:Math.round(rev-cogs-pay)});
+  }));
+  goalsData = [
+    {location:'Aura Aesthetics',title:'Revenue Target',dateSet:'Jan 15, 2026',targetDate:'Jun 30, 2026',status:'On Track',desc:'Grow monthly revenue to $150,000 by end of Q2 2026.',notes:'Mar 2026: Trending well, up 10% YoY. New injector onboarded.\nJan 2026: Goal set at annual review with owner.'},
+    {location:'Aura Aesthetics',title:'Reduce COGs to <30%',dateSet:'Jan 15, 2026',targetDate:'Dec 31, 2026',status:'At Risk',desc:'Reduce COGs as % of revenue to below 30% through supplier renegotiation.',notes:'Mar 2026: COGs at 28.3% but supplier costs rising — watch closely.\nJan 2026: COGs at 31%. Two vendors identified for renegotiation.'},
+    {location:'Aura Aesthetics',title:'Hire Lead Injector',dateSet:'Feb 1, 2026',targetDate:'Apr 30, 2026',status:'On Track',desc:'Recruit and onboard a dedicated lead injector to support growth.',notes:'Mar 2026: 3 candidates in final round interviews.\nFeb 2026: Job posting live, 12 applications received.'},
+    {location:'Pura Vida MedSpa — Maple Lawn',title:'Payroll Efficiency',dateSet:'Jan 15, 2026',targetDate:'Sep 30, 2026',status:'On Track',desc:'Keep payroll below 35% of revenue as the team scales.',notes:'Mar 2026: Payroll at 31.2% — well within target.\nJan 2026: Running at 33.7%. Monitor as hiring continues.'},
+    {location:'Pura Vida MedSpa — Maple Lawn',title:'Launch Membership Program',dateSet:'Feb 15, 2026',targetDate:'May 31, 2026',status:'Not Started',desc:'Launch a recurring membership targeting 50 enrolled members by June.',notes:'Mar 2026: Soft launch delayed — awaiting POS integration.\nFeb 2026: Program designed, pricing finalized at $199/mo.'},
+    {location:'Pure Regenerative Medicine',title:'Net Income >20%',dateSet:'Jan 15, 2026',targetDate:'Dec 31, 2026',status:'Achieved',desc:'Improve net income margin to above 20% and sustain through year end.',notes:'Mar 2026: Net margin at 40% — exceptional. Focus on sustaining.\nJan 2026: Started at 22% margin. Strong baseline.'},
+    {location:'Pure Regenerative Medicine',title:'Expand Service Menu',dateSet:'Feb 1, 2026',targetDate:'Jul 31, 2026',status:'At Risk',desc:'Add 3 new high-margin services (e.g. RF microneedling, Morpheus8) to the menu.',notes:'Mar 2026: Equipment purchase delayed — supply issues. Reviewing alternatives.\nFeb 2026: Two devices shortlisted. Awaiting final vendor pricing.'},
+  ];
+  renderDashboard(rows, LOCS);
+  setStatus('✓ Sample data loaded','ok');
+}
+
+function clearData() {
+  ['loc1','loc2','loc3','loc4','loc5','loc6','loc7','loc8','loc9','loc10','loc11','loc12'].forEach(loc => ['month','trend'].forEach(type => {
+    const el = document.getElementById(loc+'-'+type+'-content');
+    if(el) el.innerHTML = '<div class="empty-state"><div class="empty-icon">◇</div><div class="empty-title">No Data Loaded</div><div class="empty-sub">Paste your Google Sheet URLs above or load sample data.</div></div>';
+  }));
+  Object.values(chartInstances).forEach(c=>{try{c.destroy();}catch(e){}});
+  chartInstances={};goalsData=[];
+  document.getElementById('current-period').textContent='— / —';
+  setStatus('','');
+}
+
+function parseFinCSV(text) {
+  const lines=text.trim().split('\n');
+  if(!lines.length)return[];
+  const headers=lines[0].split(',').map(h=>h.trim().toLowerCase().replace(/\s+/g,''));
+  const rows=[];
+  for(let i=1;i<lines.length;i++){
+    const vals=lines[i].split(',').map(v=>v.trim().replace(/[$,"]/g,''));
+    if(vals.length<2)continue;
+    const o={};headers.forEach((h,idx)=>{o[h]=vals[idx]||'';});
+    rows.push({location:o['location']||o['loc']||'',month:o['month']||o['period']||'',
+      revenue:parseFloat(o['revenue']||o['totalrevenue']||0),cogs:parseFloat(o['cogs']||0),
+      payroll:parseFloat(o['payroll']||0),net:parseFloat(o['netincome']||o['net']||0)});
+  }
+  return rows.filter(r=>r.location&&r.month);
+}
+
+function parseGoalsCSV(text) {
+  const lines=text.trim().split('\n');
+  if(!lines.length)return[];
+  const headers=lines[0].split(',').map(h=>h.trim().toLowerCase().replace(/[\s\-_&]/g,''));
+  const rows=[];
+  for(let i=1;i<lines.length;i++){
+    const vals=splitCSV(lines[i]);
+    if(vals.length<2)continue;
+    const o={};headers.forEach((h,idx)=>{o[h]=(vals[idx]||'').trim().replace(/^"|"$/g,'');});
+    if(o['location']&&(o['goaltitle']||o['title']||o['goaltit'])){
+      rows.push({location:o['location'],title:o['goaltitle']||o['title']||o['goaltit']||'',
+        dateSet:o['dateset']||o['date']||'',targetDate:o['targetdate']||o['target']||'',
+        status:o['status']||'',desc:o['goaldescription']||o['description']||o['desc']||'',
+        notes:o['followupnotes']||o['notes']||o['followup']||''});
+    }
+  }
+  return rows;
+}
+
+function parseGoalsFromGviz(json) {
+  var cols = json.table.cols.map(function(c){ return c.label.toLowerCase().replace(/[\s\-_&]/g,''); });
+  var rows = json.table.rows || [];
+  var result = [];
+  rows.forEach(function(row) {
+    var o = {};
+    row.c.forEach(function(cell, i){ o[cols[i]] = (cell && cell.v != null) ? String(cell.v).trim() : ''; });
+    if (o['location'] && (o['goaltitle'] || o['title'])) {
+      result.push({
+        location:   o['location'],
+        title:      o['goaltitle'] || o['title'] || '',
+        dateSet:    o['dateset'] || o['date'] || '',
+        targetDate: o['targetdate'] || o['target'] || '',
+        status:     o['status'] || '',
+        desc:       o['goaldescription'] || o['description'] || o['desc'] || '',
+        notes:      o['followupnotes'] || o['notes'] || o['followup'] || ''
+      });
+    }
+  });
+  return result;
+}
+
+function splitCSV(line) {
+  const r=[];let c='',q=false;
+  for(let i=0;i<line.length;i++){
+    const ch=line[i];
+    if(ch==='"'){q=!q;}else if(ch===','&&!q){r.push(c);c='';}else c+=ch;
+  }
+  r.push(c);return r;
+}
+
+function renderDashboard(rows, locs) {
+  Object.values(chartInstances).forEach(c=>{try{c.destroy();}catch(e){}});
+  chartInstances={};
+  var slots=['loc1','loc2','loc3','loc4','loc5','loc6','loc7','loc8','loc9','loc10','loc11','loc12'];
+  var sortedLocs=locs.slice(0,12);
+  var months=[...new Set(rows.map(r=>r.month))];
+  var latestMonth=months[months.length-1];
+  document.getElementById('current-period').textContent=latestMonth||'—';
+
+  // Short display labels for pills
+  var SHORT = {
+    'Pura Vida MedSpa — Maple Lawn': 'Pura Vida - Maple Lawn',
+    'Pura Vida MedSpa — Marriottsville': 'Pura Vida - Marriottsville',
+    'Pure Regenerative Medicine': 'Pure Regenerative',
+    'Chrome Aesthetics Spa': 'Chrome Aesthetics',
+    'Urban Aesthetics Gilbert': 'Urban - Gilbert',
+    'Urban Aesthetics Fishersville': 'Urban - Fishersville'
+  };
+  function shortLabel(name) { return SHORT[name] || name; }
+
+  // Update pills to exactly match the data order so pills and panels stay in sync
+  var pills = document.querySelectorAll('.loc-pill');
+  pills.forEach(function(pill, i) {
+    if (sortedLocs[i]) {
+      pill.textContent = shortLabel(sortedLocs[i]);
+      pill.dataset.slot = slots[i];
+    }
+  });
+
+  sortedLocs.forEach(function(locName, li) {
+    var locRows=rows.filter(r=>r.location===locName);
+    var locMonths=[...new Set(locRows.map(r=>r.month))];
+    var current=locRows.find(r=>r.month===latestMonth)||locRows[locRows.length-1];
+    renderMonthPanel(slots[li],locName,current,latestMonth);
+    renderTrendPanel(slots[li],locName,locRows,locMonths,goalsData.filter(g=>g.location===locName));
+  });
+}
+
+function renderMonthPanel(slot,locName,d,month) {
+  const rev=d?d.revenue:0,cogs=d?d.cogs:0,pay=d?d.payroll:0,net=d?d.net:(rev-cogs-pay),nn=net<0;
+  document.getElementById(slot+'-month-content').innerHTML=`
+    <div class="loc-header"><div class="loc-title">${locName}</div><div class="loc-month">${month}</div></div>
+    <div class="metrics-grid">
+      <div class="metric-card revenue"><div class="metric-label">Total Revenue</div><div class="metric-value">${fmt$(rev)}</div><div class="metric-pct-row"><span class="metric-pct"><span class="pct-val">100%</span></span><span style="font-size:10px;color:var(--text-muted)">of revenue</span></div><div class="metric-bar-track"><div class="metric-bar-fill" style="width:100%"></div></div></div>
+      <div class="metric-card cogs"><div class="metric-label">Cost of Goods (COGs)</div><div class="metric-value">${fmt$(cogs)}</div><div class="metric-pct-row"><span class="metric-pct"><span class="pct-val">${fmtPct(pct(cogs,rev))}</span></span><span style="font-size:10px;color:var(--text-muted)">of revenue</span></div><div class="metric-bar-track"><div class="metric-bar-fill" style="width:${Math.min(100,pct(cogs,rev))}%"></div></div></div>
+      <div class="metric-card payroll"><div class="metric-label">Payroll</div><div class="metric-value">${fmt$(pay)}</div><div class="metric-pct-row"><span class="metric-pct"><span class="pct-val">${fmtPct(pct(pay,rev))}</span></span><span style="font-size:10px;color:var(--text-muted)">of revenue</span></div><div class="metric-bar-track"><div class="metric-bar-fill" style="width:${Math.min(100,pct(pay,rev))}%"></div></div></div>
+      <div class="metric-card net ${nn?'negative':''}"><div class="metric-label">Net Income</div><div class="metric-value" style="color:${nn?'#c07070':'var(--text)'}">${fmt$(net)}</div><div class="metric-pct-row"><span class="metric-pct"><span class="pct-val">${fmtPct(pct(net,rev))}</span></span><span style="font-size:10px;color:var(--text-muted)">of revenue</span></div><div class="metric-bar-track"><div class="metric-bar-fill" style="width:${Math.min(100,Math.abs(pct(net,rev)))}%"></div></div></div>
+    </div>
+    <div class="section-title">Breakdown — ${month}</div>
+    <table class="metrics-table"><thead><tr><th>Metric</th><th>Amount</th><th>% of Revenue</th></tr></thead><tbody>
+      <tr><td>Total Revenue</td><td>${fmt$(rev)}</td><td><span style="color:var(--gold-light)">100.0%</span></td></tr>
+      <tr><td>Cost of Goods (COGs)</td><td>${fmt$(cogs)}</td><td><span style="color:var(--text-dim)">${fmtPct(pct(cogs,rev))}</span></td></tr>
+      <tr><td>Payroll</td><td>${fmt$(pay)}</td><td><span style="color:var(--text-dim)">${fmtPct(pct(pay,rev))}</span></td></tr>
+      <tr style="background:var(--surface)"><td style="font-weight:500;letter-spacing:.12em">Net Income</td><td style="color:${nn?'#c07070':'var(--green)'};font-weight:400">${fmt$(net)}</td><td><span style="color:${nn?'#c07070':'var(--green)'}">${fmtPct(pct(net,rev))}</span></td></tr>
+    </tbody></table>`;
+}
+
+function renderTrendPanel(slot,locName,rows,months,goals) {
+  const revenues=months.map(m=>{const r=rows.find(x=>x.month===m);return r?r.revenue:null;});
+  const cogs    =months.map(m=>{const r=rows.find(x=>x.month===m);return r?r.cogs:null;});
+  const payrolls=months.map(m=>{const r=rows.find(x=>x.month===m);return r?r.payroll:null;});
+  const nets    =months.map(m=>{const r=rows.find(x=>x.month===m);return r?r.net:null;});
+  const cid=slot+'-chart';
+
+  // Build table rows separately to avoid deep nesting
+  var tableRows = '';
+  for (var ti=0; ti<months.length; ti++) {
+    var m=months[ti], rev=revenues[ti]||0, cog=cogs[ti]||0, pay=payrolls[ti]||0, net=nets[ti]||0, nn=net<0;
+    var nc=nn?'#c07070':'#5a9e6f';
+    tableRows += '<tr><td style="font-size:11px">'+m+'</td>'
+      +'<td style="color:var(--gold-light)">'+fmt$(rev)+'</td>'
+      +'<td>'+fmt$(cog)+'</td>'
+      +'<td style="color:var(--text-muted)">'+fmtPct(pct(cog,rev))+'</td>'
+      +'<td>'+fmt$(pay)+'</td>'
+      +'<td style="color:var(--text-muted)">'+fmtPct(pct(pay,rev))+'</td>'
+      +'<td style="color:'+nc+'">'+fmt$(net)+'</td>'
+      +'<td style="color:'+nc+'">'+fmtPct(pct(net,rev))+'</td></tr>';
+  }
+
+  // Build full HTML in pieces
+  var html = '';
+  html += '<div class="loc-header"><div class="loc-title">'+locName+'</div><div class="loc-month">Month-by-Month Trend</div></div>';
+  html += '<div class="section-title">Revenue & Expenses Over Time</div>';
+  html += '<div class="chart-wrap"><canvas id="'+cid+'"></canvas>';
+  html += '<div class="chart-legend">';
+  html += '<div class="legend-item"><div class="legend-dot" style="background:#c9922a"></div>Revenue</div>';
+  html += '<div class="legend-item"><div class="legend-dot" style="background:#888"></div>COGs</div>';
+  html += '<div class="legend-item"><div class="legend-dot" style="background:#7a8ba8"></div>Payroll</div>';
+  html += '<div class="legend-item"><div class="legend-dot" style="background:#5a9e6f"></div>Net Income</div>';
+  html += '</div></div>';
+  registerSlot(slot, locName);
+  html += buildGoalCards(goals, slot, locName);
+  html += '<div class="section-title" style="margin-top:32px;">Monthly Detail</div>';
+  html += '<table class="metrics-table"><thead><tr><th>Month</th><th>Revenue</th><th>COGs</th><th>% Rev</th><th>Payroll</th><th>% Rev</th><th>Net Income</th><th>% Rev</th></tr></thead>';
+  html += '<tbody>'+tableRows+'</tbody></table>';
+  document.getElementById(slot+'-trend-content').innerHTML = html;
+
+  setTimeout(()=>{
+    const canvas=document.getElementById(cid);if(!canvas)return;
+    if(chartInstances[cid]){try{chartInstances[cid].destroy();}catch(e){}}
+    const lb=months.map(m=>m.length>8?m.slice(0,3)+' '+m.slice(-4):m);
+    chartInstances[cid]=new Chart(canvas.getContext('2d'),{
+      type:'bar',
+      data:{labels:lb,datasets:[
+        {label:'Revenue',   data:revenues, backgroundColor:'rgba(201,146,42,0.75)', borderColor:'#c9922a', borderWidth:1, borderRadius:2},
+        {label:'COGs',      data:cogs,     backgroundColor:'rgba(136,136,136,0.6)', borderColor:'#888',    borderWidth:1, borderRadius:2},
+        {label:'Payroll',   data:payrolls, backgroundColor:'rgba(122,139,168,0.6)', borderColor:'#7a8ba8', borderWidth:1, borderRadius:2},
+        {label:'Net Income',data:nets,     backgroundColor:'rgba(90,158,111,0.75)', borderColor:'#5a9e6f', borderWidth:1, borderRadius:2}
+      ]},
+      options:{responsive:true,interaction:{mode:'index',intersect:false},
+        plugins:{legend:{display:false},tooltip:{backgroundColor:'#181818',borderColor:'rgba(255,255,255,0.08)',borderWidth:1,titleColor:'#e8b860',bodyColor:'rgba(240,236,228,0.7)',padding:12,titleFont:{family:"'Jost'",size:11},bodyFont:{family:"'Jost'",size:12},callbacks:{label:ctx=>' '+ctx.dataset.label+': '+fmt$(ctx.parsed.y)}}},
+        scales:{x:{ticks:{color:'rgba(240,236,228,0.35)',font:{family:"'Jost'",size:10},maxRotation:45},grid:{color:'rgba(255,255,255,0.04)'}},y:{ticks:{color:'rgba(240,236,228,0.35)',font:{family:"'Jost'",size:10},callback:v=>'$'+(Math.abs(v)>=1000?(v/1000).toFixed(0)+'k':v)},grid:{color:'rgba(255,255,255,0.04)'}}}}
+    });
+  },50);
+}
+
+// ══ GOAL STORAGE (localStorage) ══
+var STORAGE_KEY = 'aviva_goals_v2';
+
+// ── Seed data (pre-loaded goals) ──
+(function() {
+  try {
+    if (!localStorage.getItem(STORAGE_KEY)) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({"Pura Vida MedSpa — Maple Lawn": [], "Aura Aesthetics": [{"title": "COGS", "status": "On Track", "desc": "Reduce the amount of retail/injectable stock.  Stop bulk buying.", "dateSet": "March, 26", "targetDate": "Q3", "notes": []}, {"title": "Podium vs. Weave", "status": "Not Started", "desc": "Research Weave costs vs. Podium which is very pricy (+$1000/mo)", "dateSet": "March, 26", "targetDate": "Q2", "notes": []}, {"title": "Staff capacity expansion", "status": "Not Started", "desc": "Move Erin (PT) out and bring her best friend in.  She has full book of business that would come with her.", "dateSet": "March, 26", "targetDate": "Q2", "notes": []}, {"title": "Hire PCC", "status": "Not Started", "desc": "Patient Care Coordinator - start part time to work call lists, manage leads coming in", "dateSet": "March, 26", "targetDate": "Q2", "notes": []}], "Illume Aesthetics": [{"title": "Larger space", "status": "Not Started", "desc": "Move into larger 8 room space", "dateSet": "March, 26", "targetDate": "Q1", "notes": []}, {"title": "Hire Clinic Director", "status": "Not Started", "desc": "", "dateSet": "March, 26", "targetDate": "Q2", "notes": []}, {"title": "Transition to Zenoti", "status": "Not Started", "desc": "", "dateSet": "March, 26", "targetDate": "Q2", "notes": []}, {"title": "Transition to Medvelle", "status": "Not Started", "desc": "", "dateSet": "March, 26", "targetDate": "Q2", "notes": []}]}));
+    }
+  } catch(e) {}
+})();
+
+function loadGoalsFromStorage() {
+  try {
+    var raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch(e) { return {}; }
+}
+
+function saveGoalsToStorage(data) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    return true;
+  } catch(e) { return false; }
+}
+
+function getGoalsForLoc(locName) {
+  var all = loadGoalsFromStorage();
+  return all[locName] || [];
+}
+
+function saveGoalsForLoc(locName, goals) {
+  var all = loadGoalsFromStorage();
+  all[locName] = goals;
+  saveGoalsToStorage(all);
+}
+
+function todayStr() {
+  var d = new Date();
+  var m = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()];
+  return m + ' ' + d.getFullYear();
+}
+
+function statusClass(status) {
+  var map = {'On Track':'on-track','In Progress':'in-progress','At Risk':'at-risk','Achieved':'achieved','Paused':'paused','Not Started':'not-started'};
+  return map[status] || 'not-started';
+}
+
+function buildGoalCards(goals, slot, locName) {
+  var stored = getGoalsForLoc(locName);
+  var active = stored.filter(function(g){ return g.status !== 'Achieved'; }).length;
+  var achieved = stored.filter(function(g){ return g.status === 'Achieved'; }).length;
+
+  var html = '<div class="goals-section">';
+  html += '<div class="goals-header-row">';
+  html += '<div class="section-title" style="margin:0">Goals &amp; Visit Notes</div>';
+  html += '<div style="display:flex;gap:8px;align-items:center">';
+  if (active) html += '<span class="goals-count">'+active+' active</span>';
+  if (achieved) html += '<span class="goals-count" style="color:var(--blue)">'+achieved+' achieved</span>';
+  html += '<span class="save-indicator" id="save-ind-'+slot+'">Saved</span>';
+  html += '</div></div>';
+  html += '<div class="goal-cards-grid" id="goal-grid-'+slot+'">';
+  stored.forEach(function(g, idx) {
+    html += renderGoalCard(g, idx, slot, locName);
+  });
+  html += '</div>';
+  html += '<button class="btn-add-goal" id="add-goal-'+slot+'" onclick="addGoalById(this)">+ Add Goal</button>';
+  html += '</div>';
+  return html;
+}
+
+function escAttr(s) {
+  if (!s) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function q(s) {
+  // Wrap a string value safely for use in an onclick="..." attribute
+  // Uses &#39; for single quotes so the HTML attribute stays valid
+  return "'" + escAttr(String(s || '')) + "'";
+}
+
+function renderGoalCard(g, idx, slot, locName) {
+  var sc = statusClass(g.status);
+  var isAchieved = g.status === 'Achieved';
+  var cardId = slot+'-g'+idx;
+
+  var notesHtml = '';
+  var noteList = g.notes || [];
+  if (noteList.length) {
+    notesHtml += '<div class="notes-thread">';
+    noteList.forEach(function(n) {
+      notesHtml += '<div class="note-entry">'
+        + '<span class="note-date-txt">'+n.date+'</span>'
+        + '<span class="note-text-txt">'+n.text+'</span>'
+        + '</div>';
+    });
+    notesHtml += '</div>';
+  }
+  notesHtml += '<div class="add-note-row">'
+    + '<input class="note-date-new" id="nd-'+cardId+'" placeholder="'+todayStr()+'" value="" />'
+    + '<textarea class="note-text-new" id="nt-'+cardId+'" placeholder="Add a follow-up note..." rows="2"></textarea>'
+    + '<button class="btn-add-note" onclick="addNoteByEl(this)" data-slot="'+slot+'" data-idx="'+idx+'">Add</button>'
+    + '</div>';
+
+  var card = '<div class="goal-card status-'+sc+'" id="card-'+cardId+'" style="'+(isAchieved?'opacity:.7':'')+'">';
+  card += '<div class="goal-card-inner">';
+  card += '<div class="goal-card-top">';
+  card += '<input class="goal-title-input" id="gt-'+cardId+'" value="'+escAttr(g.title||'')+'" placeholder="Goal title..." />';
+  card += '<select class="status-select s-'+sc+'" id="gs-'+cardId+'" onchange="onStatusByEl(this)" data-slot="'+slot+'" data-idx="'+idx+'">';
+  ['On Track','In Progress','At Risk','Achieved','Paused','Not Started'].forEach(function(s) {
+    card += '<option value="'+s+'"'+(g.status===s?' selected':'')+'>'+s+'</option>';
+  });
+  card += '</select></div>';
+  card += '<textarea class="goal-desc-input" id="gd-'+cardId+'" placeholder="Describe this goal..." rows="2">'+escAttr(g.desc||'')+'</textarea>';
+  card += '<div class="goal-dates-row">';
+  card += '<div class="goal-date-field"><span class="goal-date-label-txt">Date Set</span><input class="goal-date-input" id="gds-'+cardId+'" value="'+escAttr(g.dateSet||'')+'" placeholder="e.g. Jan 2026" /></div>';
+  card += '<div class="goal-date-field"><span class="goal-date-label-txt">Target Date</span><input class="goal-date-input" id="gdt-'+cardId+'" value="'+escAttr(g.targetDate||'')+'" placeholder="e.g. Jun 2026" /></div>';
+  card += '</div>';
+  card += '<button class="goal-notes-toggle" onclick="toggleNotes(this)" data-card="'+cardId+'">';
+  card += '<span class="toggle-arrow" id="arr-'+cardId+'">&#9654;</span> Follow-Up Notes';
+  if (noteList.length) card += ' <span style="color:var(--text-muted);font-size:9px;margin-left:4px">('+noteList.length+')</span>';
+  card += '</button>';
+  card += '<div class="goal-notes-body" id="nb-'+cardId+'">'+notesHtml+'</div>';
+  card += '<div class="goal-card-footer">';
+  card += '<button class="btn-del-goal" onclick="deleteGoalByEl(this)" data-slot="'+slot+'" data-idx="'+idx+'">Delete</button>';
+  card += '<button class="btn-save-goal" onclick="saveGoalByEl(this)" data-slot="'+slot+'" data-idx="'+idx+'">Save</button>';
+  card += '</div>';
+  card += '</div></div>';
+  return card;
+}
+
+// ── Slot-to-location registry ──
+var _slotLocMap = {};
+
+function registerSlot(slot, locName) {
+  _slotLocMap[slot] = locName;
+}
+
+function addGoalById(btn) {
+  var slot = btn.id.replace('add-goal-','');
+  var locName = _slotLocMap[slot];
+  if (locName) addGoal(slot, locName);
+}
+
+// ── Slot-registry-based click handlers ──
+function saveGoalByEl(btn) {
+  var slot = btn.dataset.slot, idx = parseInt(btn.dataset.idx);
+  saveGoal(slot, _slotLocMap[slot], idx);
+}
+function deleteGoalByEl(btn) {
+  var slot = btn.dataset.slot, idx = parseInt(btn.dataset.idx);
+  deleteGoal(slot, _slotLocMap[slot], idx);
+}
+function addNoteByEl(btn) {
+  var slot = btn.dataset.slot, idx = parseInt(btn.dataset.idx);
+  addNote(slot, _slotLocMap[slot], idx);
+}
+function onStatusByEl(sel) {
+  var slot = sel.dataset.slot, idx = parseInt(sel.dataset.idx);
+  onStatusChange(sel, slot, _slotLocMap[slot], idx);
+}
+
+function addGoal(slot, locName) {
+  var goals = getGoalsForLoc(locName);
+  goals.push({ title:'', status:'Not Started', desc:'', dateSet:'', targetDate:'', notes:[] });
+  saveGoalsForLoc(locName, goals);
+  refreshGoalGrid(slot, locName);
+  flashSaved(slot);
+}
+
+function saveGoal(slot, locName, idx) {
+  var goals = getGoalsForLoc(locName);
+  var cardId = slot+'-g'+idx;
+  goals[idx].title     = document.getElementById('gt-'+cardId).value;
+  goals[idx].status    = document.getElementById('gs-'+cardId).value;
+  goals[idx].desc      = document.getElementById('gd-'+cardId).value;
+  goals[idx].dateSet   = document.getElementById('gds-'+cardId).value;
+  goals[idx].targetDate= document.getElementById('gdt-'+cardId).value;
+  saveGoalsForLoc(locName, goals);
+  refreshGoalGrid(slot, locName);
+  flashSaved(slot);
+}
+
+function deleteGoal(slot, locName, idx) {
+  if (!confirm('Delete this goal?')) return;
+  var goals = getGoalsForLoc(locName);
+  goals.splice(idx, 1);
+  saveGoalsForLoc(locName, goals);
+  refreshGoalGrid(slot, locName);
+  flashSaved(slot);
+}
+
+function addNote(slot, locName, idx) {
+  var cardId = slot+'-g'+idx;
+  var dateEl = document.getElementById('nd-'+cardId);
+  var textEl = document.getElementById('nt-'+cardId);
+  var noteText = textEl.value.trim();
+  if (!noteText) return;
+  var noteDate = dateEl.value.trim() || todayStr();
+  var goals = getGoalsForLoc(locName);
+  if (!goals[idx].notes) goals[idx].notes = [];
+  goals[idx].notes.unshift({ date: noteDate, text: noteText });
+  saveGoalsForLoc(locName, goals);
+  refreshGoalGrid(slot, locName);
+  flashSaved(slot);
+}
+
+function onStatusChange(sel, slot, locName, idx) {
+  var sc = statusClass(sel.value);
+  sel.className = 'status-select s-'+sc;
+  var card = document.getElementById('card-'+slot+'-g'+idx);
+  if (card) {
+    card.className = 'goal-card status-'+sc + (sel.value==='Achieved'?' achieved':'');
+  }
+}
+
+function refreshGoalGrid(slot, locName) {
+  var grid = document.getElementById('goal-grid-'+slot);
+  if (!grid) return;
+  var stored = getGoalsForLoc(locName);
+  var html = '';
+  stored.forEach(function(g, idx) { html += renderGoalCard(g, idx, slot, locName); });
+  grid.innerHTML = html;
+  // Update counts
+  var active = stored.filter(function(g){ return g.status !== 'Achieved'; }).length;
+  var achieved = stored.filter(function(g){ return g.status === 'Achieved'; }).length;
+}
+
+function flashSaved(slot) {
+  var el = document.getElementById('save-ind-'+slot);
+  if (!el) return;
+  el.classList.add('show');
+  setTimeout(function(){ el.classList.remove('show'); }, 1800);
+}
+
+function toggleNotes(btn) {
+  var cardId = btn.dataset.card;
+  var b = document.getElementById('nb-'+cardId);
+  var a = document.getElementById('arr-'+cardId);
+  if (!b) return;
+  var open = b.classList.toggle('visible');
+  if (a) a.classList.toggle('open', open);
+}
+
+// ── PIN LOCK ──
+var _PIN = '8325';
+var _goalsUnlocked = false;
+
+function checkPin() {
+  var entered = document.getElementById('pin-input').value;
+  var statusEl = document.getElementById('pin-status');
+  if (entered === _PIN) {
+    _goalsUnlocked = true;
+    document.body.classList.remove('goals-locked');
+    statusEl.textContent = '✓ Unlocked';
+    statusEl.className = 'pin-status unlocked';
+    document.getElementById('pin-input').value = '';
+  } else {
+    statusEl.textContent = 'Incorrect PIN';
+    statusEl.className = 'pin-status wrong';
+    document.getElementById('pin-input').value = '';
+    setTimeout(function() {
+      statusEl.textContent = 'Locked';
+      statusEl.className = 'pin-status';
+    }, 2000);
+  }
+}
+
+// Start locked
+document.addEventListener('DOMContentLoaded', function() {
+  document.body.classList.add('goals-locked');
+});
+
+</script>
+</body>
+</html>
