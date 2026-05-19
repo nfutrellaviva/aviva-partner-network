@@ -1179,7 +1179,7 @@ function loadAll() {
   // Goals handled locally via localStorage
   var cbName = '_gvizCb_' + Date.now();
   var jsonpUrl = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID
-    + '/gviz/tq?tqx=out:json;responseHandler:' + cbName + '&sheet=Submissions&t=' + Date.now();
+    + '/gviz/tq?tqx=responseHandler:' + cbName + '&sheet=Submissions&t=' + Date.now();
 
   loadViaJSONP(jsonpUrl, cbName)
     .then(function(json) {
