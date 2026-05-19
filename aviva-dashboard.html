@@ -8,7 +8,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js">
 
 // ── EXEC DASHBOARD ──
-var ALL_LOCS_EXEC = ['Aura Aesthetics', 'Pura Vida MedSpa — Maple Lawn', 'Pura Vida MedSpa — Marriottsville', 'Pure Regenerative Medicine', 'IAesthetic MedSpa', 'Renew MedSpa', 'Illume Aesthetics', 'Luminate Clinic', 'Youthtopia MedSpa', 'Chrome Aesthetics Spa', 'Urban Aesthetics Gilbert', 'Urban Aesthetics Fishersville'];
+var ALL_LOCS_EXEC = ['Aesthetic Artistry Laser Center','Aura Aesthetics','Chrome Aesthetics Spa','IAesthetic MedSpa','Illume Aesthetics','Luminate Clinic','Pura Vida MedSpa — Maple Lawn','Pure Regenerative Medicine','Renew MedSpa','Urban Aesthetics Gilbert','Youthtopia MedSpa'];
 
 function statusDotColor(status) {
   var map = {'On Track':'#5a9e6f','In Progress':'#9aaecc','At Risk':'#c07070','Achieved':'#6aaabb','Paused':'#aaaa55','Not Started':'rgba(255,255,255,0.15)'};
@@ -989,18 +989,17 @@ document.addEventListener('DOMContentLoaded', function() {
     <button class="view-btn" data-view="completed" onclick="pickViewExec(this)">Completed Goals</button>
   </div>
   <div class="nav-row2">
-    <div class="loc-pill  active" data-slot="loc1" onclick="pickLoc(this)">Aura Aesthetics</div>
-    <div class="loc-pill" data-slot="loc2" onclick="pickLoc(this)">Pura Vida - Maple Lawn</div>
-    <div class="loc-pill" data-slot="loc3" onclick="pickLoc(this)">Pura Vida - Marriottsville</div>
-    <div class="loc-pill" data-slot="loc4" onclick="pickLoc(this)">Pure Regenerative</div>
-    <div class="loc-pill" data-slot="loc5" onclick="pickLoc(this)">IAesthetic MedSpa</div>
-    <div class="loc-pill" data-slot="loc6" onclick="pickLoc(this)">Renew MedSpa</div>
-    <div class="loc-pill" data-slot="loc7" onclick="pickLoc(this)">Illume Aesthetics</div>
-    <div class="loc-pill" data-slot="loc8" onclick="pickLoc(this)">Luminate Clinic</div>
-    <div class="loc-pill" data-slot="loc9" onclick="pickLoc(this)">Youthtopia MedSpa</div>
-    <div class="loc-pill" data-slot="loc10" onclick="pickLoc(this)">Chrome Aesthetics</div>
-    <div class="loc-pill" data-slot="loc11" onclick="pickLoc(this)">Urban - Gilbert</div>
-    <div class="loc-pill" data-slot="loc12" onclick="pickLoc(this)">Urban - Fishersville</div>
+    <div class="loc-pill" data-slot="loc1" onclick="pickLoc(this)">Aesthetic Artistry</div>
+    <div class="loc-pill" data-slot="loc2" onclick="pickLoc(this)">Aura Aesthetics</div>
+    <div class="loc-pill" data-slot="loc3" onclick="pickLoc(this)">Chrome Aesthetics</div>
+    <div class="loc-pill" data-slot="loc4" onclick="pickLoc(this)">IAesthetic MedSpa</div>
+    <div class="loc-pill" data-slot="loc5" onclick="pickLoc(this)">Illume Aesthetics</div>
+    <div class="loc-pill" data-slot="loc6" onclick="pickLoc(this)">Luminate Clinic</div>
+    <div class="loc-pill" data-slot="loc7" onclick="pickLoc(this)">Pura Vida - Maple Lawn</div>
+    <div class="loc-pill" data-slot="loc8" onclick="pickLoc(this)">Pure Regenerative</div>
+    <div class="loc-pill" data-slot="loc9" onclick="pickLoc(this)">Renew MedSpa</div>
+    <div class="loc-pill" data-slot="loc10" onclick="pickLoc(this)">Urban - Gilbert</div>
+    <div class="loc-pill" data-slot="loc11" onclick="pickLoc(this)">Youthtopia MedSpa</div>
   </div>
 </div>
 <nav class="tabs"></nav>
@@ -1030,8 +1029,7 @@ document.addEventListener('DOMContentLoaded', function() {
   <div class="panel" id="panel-loc9-trend"><div id="loc9-trend-content"><div class="empty-state"><div class="empty-icon">◇</div><div class="empty-title">No Data Loaded</div><div class="empty-sub">Load data to view trend and goals.</div></div></div></div>
   <div class="panel" id="panel-loc10-trend"><div id="loc10-trend-content"><div class="empty-state"><div class="empty-icon">◇</div><div class="empty-title">No Data Loaded</div><div class="empty-sub">Load data to view trend and goals.</div></div></div></div>
   <div class="panel" id="panel-loc11-trend"><div id="loc11-trend-content"><div class="empty-state"><div class="empty-icon">◇</div><div class="empty-title">No Data Loaded</div><div class="empty-sub">Load data to view trend and goals.</div></div></div></div>
-  <div class="panel" id="panel-loc12-month"><div id="loc12-month-content"><div class="empty-state"><div class="empty-icon">◇</div><div class="empty-title">No Data Loaded</div><div class="empty-sub">Paste your Google Sheet URLs above or load sample data.</div></div></div></div>
-  <div class="panel" id="panel-loc12-trend"><div id="loc12-trend-content"><div class="empty-state"><div class="empty-icon">◇</div><div class="empty-title">No Data Loaded</div><div class="empty-sub">Load data to view trend and goals.</div></div></div></div>
+  <div class="empty-title">No Data Loaded</div><div class="empty-sub">Load data to view trend and goals.</div></div></div></div>
 
   <div class="panel" id="panel-exec"><div id="exec-content"><div class="empty-state"><div class="empty-icon">◇</div><div class="empty-title">Load Data First</div><div class="empty-sub">Click Load Data to populate the executive goals view.</div></div></div></div>
   <div class="panel" id="panel-completed"><div id="completed-content"><div class="empty-state"><div class="empty-icon">◇</div><div class="empty-title">No Completed Goals</div><div class="empty-sub">Goals marked as Achieved will appear here.</div></div></div></div>
@@ -1188,7 +1186,7 @@ function loadAll() {
       var finRows = processGvizData(json);
       if (!finRows.length) throw new Error('No submissions found in the scorecard yet');
 
-      var ALL_LOCS = ['Aura Aesthetics','Pura Vida MedSpa — Maple Lawn','Pura Vida MedSpa — Marriottsville','Pure Regenerative Medicine','IAesthetic MedSpa','Renew MedSpa','Illume Aesthetics','Luminate Clinic','Youthtopia MedSpa','Chrome Aesthetics Spa','Urban Aesthetics Gilbert','Urban Aesthetics Fishersville'];
+      var ALL_LOCS = ['Aesthetic Artistry Laser Center','Aura Aesthetics','Chrome Aesthetics Spa','IAesthetic MedSpa','Illume Aesthetics','Luminate Clinic','Pura Vida MedSpa — Maple Lawn','Pure Regenerative Medicine','Renew MedSpa','Urban Aesthetics Gilbert','Youthtopia MedSpa'];
       var dataLocs = finRows.map(function(r){ return r.location; }).filter(function(v,i,a){ return a.indexOf(v)===i; });
       var orderedLocs = ALL_LOCS.filter(function(l){ return dataLocs.indexOf(l) >= 0; })
         .concat(ALL_LOCS.filter(function(l){ return dataLocs.indexOf(l) < 0; }));
@@ -1217,7 +1215,7 @@ function loadDemoData() {
   const MONTHS = ['Jan 2025','Feb 2025','Mar 2025','Apr 2025','May 2025','Jun 2025',
                   'Jul 2025','Aug 2025','Sep 2025','Oct 2025','Nov 2025','Dec 2025',
                   'Jan 2026','Feb 2026','Mar 2026'];
-  const LOCS = ['Aura Aesthetics', 'Pura Vida MedSpa — Maple Lawn', 'Pure Regenerative Medicine', 'IAesthetic MedSpa', 'Renew MedSpa', 'Illume Aesthetics', 'Luminate Clinic', 'Youthtopia MedSpa', 'Chrome Aesthetics Spa', 'Urban Aesthetics Gilbert', 'Urban Aesthetics Fishersville'];
+  const LOCS = ['Aura Aesthetics', 'Pura Vida MedSpa — Maple Lawn', 'Pure Regenerative Medicine', 'IAesthetic MedSpa', 'Renew MedSpa', 'Illume Aesthetics', 'Luminate Clinic', 'Youthtopia MedSpa', 'Chrome Aesthetics Spa', 'Urban Aesthetics Gilbert', 'Urban Aesthetics '];
   const seeds = [{rev:120000,cogs:35000,pay:40000},{rev:95000,cogs:28000,pay:33000},{rev:145000,cogs:42000,pay:48000},{rev:120000,cogs:35000,pay:40000},{rev:95000,cogs:28000,pay:33000},{rev:145000,cogs:42000,pay:48000},{rev:120000,cogs:35000,pay:40000},{rev:95000,cogs:28000,pay:33000},{rev:145000,cogs:42000,pay:48000},{rev:120000,cogs:35000,pay:40000},{rev:95000,cogs:28000,pay:33000}];
   const rows = [];
   LOCS.forEach((loc,li) => MONTHS.forEach((mo,mi) => {
@@ -1239,7 +1237,7 @@ function loadDemoData() {
 }
 
 function clearData() {
-  ['loc1','loc2','loc3','loc4','loc5','loc6','loc7','loc8','loc9','loc10','loc11','loc12'].forEach(loc => ['month','trend'].forEach(type => {
+  ['loc1','loc2','loc3','loc4','loc5','loc6','loc7','loc8','loc9','loc10','loc11'].forEach(loc => ['month','trend'].forEach(type => {
     const el = document.getElementById(loc+'-'+type+'-content');
     if(el) el.innerHTML = '<div class="empty-state"><div class="empty-icon">◇</div><div class="empty-title">No Data Loaded</div><div class="empty-sub">Paste your Google Sheet URLs above or load sample data.</div></div>';
   }));
@@ -1318,8 +1316,8 @@ function splitCSV(line) {
 function renderDashboard(rows, locs) {
   Object.values(chartInstances).forEach(c=>{try{c.destroy();}catch(e){}});
   chartInstances={};
-  var slots=['loc1','loc2','loc3','loc4','loc5','loc6','loc7','loc8','loc9','loc10','loc11','loc12'];
-  var sortedLocs=locs.slice(0,12);
+  var slots=['loc1','loc2','loc3','loc4','loc5','loc6','loc7','loc8','loc9','loc10','loc11'];
+  var sortedLocs=locs.slice(0,11);
   var months=[...new Set(rows.map(r=>r.month))];
   var latestMonth=months[months.length-1];
   document.getElementById('current-period').textContent=latestMonth||'—';
@@ -1327,11 +1325,11 @@ function renderDashboard(rows, locs) {
   // Short display labels for pills
   var SHORT = {
     'Pura Vida MedSpa — Maple Lawn': 'Pura Vida - Maple Lawn',
-    'Pura Vida MedSpa — Marriottsville': 'Pura Vida - Marriottsville',
+    'Pura Vida MedSpa — ': 'Pura Vida - ',
     'Pure Regenerative Medicine': 'Pure Regenerative',
     'Chrome Aesthetics Spa': 'Chrome Aesthetics',
     'Urban Aesthetics Gilbert': 'Urban - Gilbert',
-    'Urban Aesthetics Fishersville': 'Urban - Fishersville'
+    'Urban Aesthetics ': 'Urban - '
   };
   function shortLabel(name) { return SHORT[name] || name; }
 
@@ -1411,6 +1409,9 @@ function renderTrendPanel(slot,locName,rows,months,goals) {
   html += '<table class="metrics-table"><thead><tr><th>Month</th><th>Revenue</th><th>COGs</th><th>% Rev</th><th>Payroll</th><th>% Rev</th><th>Net Income</th><th>% Rev</th></tr></thead>';
   html += '<tbody>'+tableRows+'</tbody></table>';
 
+  // Notes section
+  html += buildPlSection(slot, locName);
+
   // 4 individual metric chart tiles
   html += '<div class="metric-charts-section">';
   html += '<div class="section-title">Metric Trends</div>';
@@ -1434,7 +1435,6 @@ function renderTrendPanel(slot,locName,rows,months,goals) {
   });
 
   html += '</div>';
-  html += buildPlSection(slot, locName);
   document.getElementById(slot+'-trend-content').innerHTML = html;
 
   // Draw all 4 charts
@@ -1856,7 +1856,7 @@ function toggleNotes(btn) {
 
 
 // ── EXEC DASHBOARD ──
-var ALL_LOCS_EXEC = ['Aura Aesthetics', 'Pura Vida MedSpa — Maple Lawn', 'Pura Vida MedSpa — Marriottsville', 'Pure Regenerative Medicine', 'IAesthetic MedSpa', 'Renew MedSpa', 'Illume Aesthetics', 'Luminate Clinic', 'Youthtopia MedSpa', 'Chrome Aesthetics Spa', 'Urban Aesthetics Gilbert', 'Urban Aesthetics Fishersville'];
+var ALL_LOCS_EXEC = ['Aura Aesthetics', 'Pura Vida MedSpa — Maple Lawn', 'Pura Vida MedSpa — ', 'Pure Regenerative Medicine', 'IAesthetic MedSpa', 'Renew MedSpa', 'Illume Aesthetics', 'Luminate Clinic', 'Youthtopia MedSpa', 'Chrome Aesthetics Spa', 'Urban Aesthetics Gilbert', 'Urban Aesthetics '];
 
 function statusDotColor(status) {
   var map = {'On Track':'#5a9e6f','In Progress':'#9aaecc','At Risk':'#c07070','Achieved':'#6aaabb','Paused':'#aaaa55','Not Started':'rgba(255,255,255,0.15)'};
